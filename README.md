@@ -4,16 +4,13 @@
 Repo for first Bangazon sprint.
 
 ## Table of Contents
-
-### Corporate Resources
+0. [Example](#example)
 1. [Computers](#computers)
-1. [Departments](#2-departments)
-1. [Employees](#3.-employees)
+1. [Departments](#departments)
+1. [Employees](#employees)
 1. [Trainings](#trainings)
 
-## Client Resource Controllers
-
-### 0. Example
+## 0. Example
 
 **Example Model**
 
@@ -51,7 +48,7 @@ Create
 
 - Save this section for last
 
-### 1 Computers
+## Computers
 
 **Computers Model**
 
@@ -59,7 +56,7 @@ Create
 
 **Computers View**
 
-### 2 Departments
+## Departments
 
 **Departments Model**
 
@@ -67,7 +64,7 @@ Create
 
 **Departments View**
 
-### 3. Employees
+## Employees
 
 **Employees Model**
 
@@ -75,7 +72,7 @@ Create
 
 **Employees View**
 
-### 4. Trainings
+## Trainings
 
 **Trainings Model**
 
