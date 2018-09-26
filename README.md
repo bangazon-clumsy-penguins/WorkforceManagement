@@ -8,7 +8,7 @@ Repo for first Bangazon sprint.
 ### Corporate Resources
 1. [Computers](#computers)
 1. [Departments](#2-departments)
-1. [Employees](###3-employees)
+1. [Employees](#3.-employees)
 1. [Trainings](#trainings)
 
 ## Client Resource Controllers
@@ -51,7 +51,7 @@ Create
 
 - Save this section for last
 
-### 1. Computers
+### 1 Computers
 
 **Computers Model**
 
@@ -67,7 +67,7 @@ Create
 
 **Departments View**
 
-### 3 Employees
+### 3. Employees
 
 **Employees Model**
 
