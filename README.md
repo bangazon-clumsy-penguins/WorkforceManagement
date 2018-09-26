@@ -12,7 +12,7 @@ Repo for first Bangazon sprint.
 
 ## Example
 
-**Example Model**
+### Example Model
 
 - Describe the Example model here
 ```c#
@@ -29,7 +29,7 @@ public class Example
 [More code]
 ```
 
-**Example Controller**
+### Example Controller
 
 Index
 - Describe the Example controller Index( ) method here
@@ -40,7 +40,7 @@ Create
 
 ...etc
 
-**Example View**
+### Example View
 
 [Have a screenshot of the view here maybe?]
 
@@ -50,33 +50,33 @@ Create
 
 ## Computers
 
-**Computers Model**
+### Computers Model
 
-**Computers Controller**
+### Computers Controller
 
-**Computers View**
+### Computers View
 
 ## Departments
 
-**Departments Model**
+### Departments Model
 
-**Departments Controller**
+### Departments Controller
 
-**Departments View**
+### Departments View
 
 ## Employees
 
-**Employees Model**
+### Employees Model
 
-**Employees Controller**
+### Employees Controller
 
-**Employees View**
+### Employees View
 
 ## Trainings
 
-**Trainings Model**
+### Trainings Model
 
-**Trainings Controller**
+### Trainings Controller
 
-**Trainings View**
+### Trainings View
 
