@@ -7,7 +7,7 @@ Repo for first Bangazon sprint.
 
 ### Corporate Resources
 1. [Computers](#computers)
-1. [Departments](#departments)
+1. [Departments](#2.-departments)
 1. [Employees](#employees)
 1. [Trainings](#trainings)
 
