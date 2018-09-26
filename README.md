@@ -10,7 +10,7 @@ Repo for first Bangazon sprint.
 1. [Employees](#employees)
 1. [Trainings](#trainings)
 
-## 0. Example
+## Example
 
 **Example Model**
 
