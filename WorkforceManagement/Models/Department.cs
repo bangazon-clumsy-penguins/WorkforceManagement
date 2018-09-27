@@ -16,7 +16,7 @@ namespace WorkforceManagement.Models
 		public int Id { get; set; }
 
 		[Required]
-		[Display(Name = "Department")]
+		[Display(Name = "Department name")]
 		public string Name { get; set; }
 
 		[Required]
