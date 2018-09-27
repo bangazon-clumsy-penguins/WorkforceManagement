@@ -74,10 +74,10 @@ namespace WorkforceManagement.Controllers
 
             string sql = $@"SELECT e.Id, e.FirstName, e.LastName, d.Id, d.Name, c.Id, c.Model, t.Id, t.Name FROM Employees e
                             JOIN Departments d ON e.DepartmentId = d.Id
-                            JOIN EmployeeComputers ec ON ec.EmployeeId = e.Id
-                            JOIN Computers c ON ec.ComputerId = c.Id
-                            JOIN EmployeeTrainings et ON et.EmployeeId = e.Id
-                            JOIN Trainings t ON et.TrainingId = t.Id
+                            LEFT JOIN EmployeeComputers ec ON ec.EmployeeId = e.Id
+                            LEFT JOIN Computers c ON ec.ComputerId = c.Id
+                            LEFT JOIN EmployeeTrainings et ON et.EmployeeId = e.Id
+                            LEFT JOIN Trainings t ON et.TrainingId = t.Id
                             WHERE e.Id = {id};";
 
             using (IDbConnection conn = Connection)
