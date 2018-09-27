@@ -34,11 +34,12 @@ namespace WorkforceManagement.Controllers
         // GET: TrainingProgram
         public async Task<IActionResult> Index()
         {
-            string sql = @"
+            string sql = $@"
             select
                 t.Id
                 ,t.Name
             from Trainings t
+            where t.startdate >= {DateTime.Now.ToString("yyyy’-‘MM’-‘dd")}
             ";
 
             using (IDbConnection conn = Connection)
