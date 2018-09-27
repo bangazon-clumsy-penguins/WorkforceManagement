@@ -17,6 +17,7 @@ namespace WorkforceManagement.Models
         [Key]
         public int Id { get; set; }
 
+        [Display(Name = "Computer Type")]
         public string Model { get; set; }
 
         public DateTime PurchaseDate { get; set; }
