@@ -7,21 +7,17 @@ using System.Threading.Tasks;
 
 namespace WorkforceManagement.Models
 {
-    /* 
-     AUTHORED: Adam Wieckert, Seth Dana, Elliot Huck, Evan Lusky, Phil Patton
-    
-     PURPOSE: Model to reflect the items on the Computers Table in the BangazonAPI DB
-    */
-    public class Computer
-    {
-        [Key]
-        public int Id { get; set; }
 
-        public string Model { get; set; }
+	public class Computer
+	{
+		[Key]
+		public int Id { get; set; }
 
-        public DateTime PurchaseDate { get; set; }
+		public string Model { get; set; }
 
-        public DateTime? DecommissionDate { get; set; }
+		public DateTime PurchaseDate { get; set; }
 
-    }
+		public DateTime? DecommissionDate { get; set; }
+
+	}
 }

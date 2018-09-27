@@ -56,6 +56,11 @@ project.fragment.lock.json
 artifacts/
 **/Properties/launchSettings.json
 
+# appsettings
+WorkforceManagement/appsettings.json
+*/appsettings.json
+*.json
+
 # StyleCop
 StyleCopReport.xml
 
