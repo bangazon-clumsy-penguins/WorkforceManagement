@@ -11,6 +11,7 @@ CREATE TABLE Trainings (
 
 CREATE TABLE Computers (
 	Id INT NOT NULL PRIMARY KEY IDENTITY,
+	Manufacturer VARCHAR(80) NOT NULL,
 	Model VARCHAR(80) NOT NULL,
 	PurchaseDate DATE NOT NULL,
 	DecommissionDate DATE

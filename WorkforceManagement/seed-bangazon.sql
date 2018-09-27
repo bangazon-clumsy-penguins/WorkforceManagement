@@ -45,12 +45,12 @@ INSERT INTO OrderedProducts (ProductId, OrderId) VALUES
 ,((SELECT Id From Products Where Title='Huffy'), 4)
 ,((SELECT Id From Products Where Title='Colt 45'), 5)
 
-INSERT INTO Computers (Model, PurchaseDate, DecommissionDate) VALUES 
-('PC', '2018-01-01', null)
-,('Mac', '2018-01-02', null)
-,('PC', '2018-01-03', null)
-,('Mac', '2018-01-04', null)
-,('PC', '2018-01-05', null)
+INSERT INTO Computers (Manufacturer, Model, PurchaseDate, DecommissionDate) VALUES 
+('PC', 'Awesome-O 3000', '2018-01-01', null)
+,('Mac', 'Poop-top', '2018-01-02', null)
+,('PC', 'The Bomb.com', '2018-01-02', null)
+,('Mac', 'Lap-crap', '2018-01-02', null)
+,('PC', 'Super-Compute 1000', '2018-01-02', null)
 
 INSERT INTO Departments (Name, Budget) VALUES 
 ('Finance', 4000)

@@ -33,6 +33,7 @@ namespace WorkforceManagement.Controllers
         {
             string sql = $@"SELECT
                             c.Id,
+                            c.Manufacturer,
                             c.Model,
                             c.PurchaseDate,
                             c.DecommissionDate

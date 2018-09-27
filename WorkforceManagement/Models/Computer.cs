@@ -16,6 +16,7 @@ namespace WorkforceManagement.Models
     {
         [Key]
         public int Id { get; set; }
+        public string Manufacturer { get; set; }
         public string Model { get; set; }
         [Display(Name = "Purchase Date")]
         public DateTime PurchaseDate { get; set; }
