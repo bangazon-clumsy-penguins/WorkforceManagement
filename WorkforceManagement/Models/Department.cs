@@ -1,27 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace WorkforceManagement.Models
 {
-    /* 
-     AUTHORED: Adam Wieckert, Seth Dana, Elliot Huck, Evan Lusky, Phil Patton
+	/* 
+		AUTHOR: Elliot Huck
+		PURPOSE: To model a department of the company. The Name and Budget are required properties and the Budget must be a non-negative double.
+	*/
 
-     PURPOSE: Model to reflect the items on the Departments Table in the BangazonAPI DB
-    */
-    public class Department
-    {
+	public class Department
+	{
+		public int Id { get; set; }
 
-        [Key]
-        public int Id { get; set; }
+		[Required]
+		[Display(Name = "Department name")]
+		public string Name { get; set; }
 
-        [Display(Name = "Department Name")]
-        public string Name { get; set; }
+		[Required]
+		[Range(0.0, Double.PositiveInfinity)]
+		public double Budget { get; set; }
 
-        public double Budget { get; set; }
-
-        public List<Employee> EmployeeList { get; set; }
-    }
+		public List<Employee> EmployeeList { get; set; }
+	}
 }
