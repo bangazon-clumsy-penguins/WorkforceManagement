@@ -7,24 +7,33 @@ using System.Threading.Tasks;
 
 namespace WorkforceManagement.Models
 {
-	public class Employee
-	{
+    /* 
+     AUTHORED: Adam Wieckert, Seth Dana, Elliot Huck, Evan Lusky, Phil Patton
 
-		[Key]
-		public int Id { get; set; }
+     PURPOSE: Model to reflect the items on the Employees Table in the BangazonAPI DB
+    */
+    public class Employee
+    {
 
-		public string FirstName { get; set; }
-		public string LastName { get; set; }
+        [Key]
+        public int Id { get; set; }
 
-		public DateTime HireDate { get; set; }
+        [Display(Name = "First Name")]
+        public string FirstName { get; set; }
 
-		public bool IsSupervisor { get; set; }
+        [Display(Name = "Last Name")]
+        public string LastName { get; set; }
 
-		public int DepartmentId { get; set; }
+        public DateTime HireDate { get; set; }
 
-		public Department Department { get; set; }
+        public bool IsSupervisor { get; set; }
 
-		public Computer Computer { get; set; }
+        public int DepartmentId { get; set; }
 
-	}
+        public Department Department { get; set; }
+
+        public Computer Computer { get; set; }
+
+
+    }
 }
