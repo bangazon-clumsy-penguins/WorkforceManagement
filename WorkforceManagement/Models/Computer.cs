@@ -20,6 +20,6 @@ namespace WorkforceManagement.Models
         [Display(Name = "Purchase Date")]
         public DateTime PurchaseDate { get; set; }
         [Display(Name = "Decommission Date")]
-        public DateTime DecommissionDate { get; set; }
+        public DateTime? DecommissionDate { get; set; }
     }
 }
