@@ -60,9 +60,32 @@ Create
 
 ### Departments Model
 
+```c#
+public class Department
+{
+	public int Id { get; set; }
+
+	[Required]
+	[Display(Name="Department")]
+	public string Name { get; set; }
+
+	[Required]
+	[Range(0.0, Double.PositiveInfinity)]
+	public double Budget { get; set; }
+
+	public List<Employee> EmployeeList { get; set; }
+}
+```
+
 ### Departments Controller
 
+Index ( )
+- [HttpGet] Gets a list of all the departments and then passes them to the index view
+
 ### Departments View
+
+Index
+- Shows a list of all the department names. Each name is a hyperlink that can be clicked to view the details of that department.
 
 ## Employees
 
