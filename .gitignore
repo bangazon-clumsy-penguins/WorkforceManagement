@@ -55,7 +55,7 @@ artifacts/
 **/Properties/launchSettings.json
 
 # appsettings
-appsettings.json
+*/appsettings.json
 
 # StyleCop
 StyleCopReport.xml
