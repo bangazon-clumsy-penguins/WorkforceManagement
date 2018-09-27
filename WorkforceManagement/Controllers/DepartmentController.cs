@@ -13,7 +13,11 @@ using System.Data.SqlClient;
 
 namespace WorkforceManagement.Controllers
 {
-	public class DepartmentController : Controller
+    /* 
+		AUTHORS: Elliot Huck, April Watson
+		PURPOSE: 
+	*/
+    public class DepartmentController : Controller
 	{
 		private readonly IConfiguration _config;
 
@@ -42,5 +46,32 @@ namespace WorkforceManagement.Controllers
 				return View(allDepartments);
 			}
 		}
-	}
+
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            string sql = $@"
+            select * 
+            from Departments d
+            where d.Id = {id}
+            ";
+
+            using (IDbConnection conn = Connection)
+            {
+
+                Department department = (await conn.QueryAsync<Department>(sql)).ToList().Single();
+
+                if (department == null)
+                {
+                    return NotFound();
+                }
+
+                return View(department);
+            }
+        }
+    }
 }
