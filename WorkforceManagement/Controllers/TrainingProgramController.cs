@@ -39,8 +39,12 @@ namespace WorkforceManagement.Controllers
                 t.Id
                 ,t.Name
             from Trainings t
-            where t.startdate >= {DateTime.Now.ToString("yyyy’-‘MM’-‘dd")}
+            where t.startdate >= '{DateTime.Now.ToString("yyyy-MM-dd")}'
             ";
+
+            Console.WriteLine(sql);
+
+            Console.ReadLine();
 
             using (IDbConnection conn = Connection)
             {
