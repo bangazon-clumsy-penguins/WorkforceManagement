@@ -1,19 +1,67 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
+using Dapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using WorkforceManagement.Models;
 
 namespace WorkforceManagement.Controllers
 {
     public class EmployeeController : Controller
     {
-        // GET: Employee
-        public ActionResult Index()
-        {
+        private readonly IConfiguration _config;
 
-            return View();
+        public EmployeeController(IConfiguration config)
+        {
+            _config = config;
+        }
+
+        public IDbConnection Connection
+        {
+            get
+            {
+                return new SqlConnection(_config.GetConnectionString("DefaultConnection"));
+            }
+        }
+
+        // GET: Employee
+        public async Task<IActionResult> Index()
+        {
+            string sql = @"
+            SELECT
+                e.Id,
+                e.FirstName,
+                e.LastName,
+                d.Id,
+                d.Name
+            FROM Employees e
+            JOIN Departments d ON e.DepartmentId = d.Id;
+        ";
+            using (IDbConnection conn = Connection)
+            {
+                Dictionary<int, Employee> Employees = new Dictionary<int, Employee>();
+
+                var EmployeeQuerySet = await conn.QueryAsync<Employee, Department, Employee>(
+                        sql,
+                        (employee, department) => {
+                            if (!Employees.ContainsKey(employee.Id))
+                            {
+                                Employees[employee.Id] = employee;
+                            }
+                            Employees[employee.Id].Department = department;
+                            return employee;
+                        }
+                    );
+                return View(Employees.Values);
+
+            }
+
+            //return View();
         }
 
         // GET: Employee/Details/5

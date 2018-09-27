@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BangazonAPI.Models
+namespace WorkforceManagement.Models
 {
     /* 
      AUTHORED: Adam Wieckert, Seth Dana, Elliot Huck, Evan Lusky, Phil Patton
@@ -17,6 +17,7 @@ namespace BangazonAPI.Models
         [Key]
         public int Id { get; set; }
 
+        [Display(Name = "Department Name")]
         public string Name { get; set; }
 
         public double Budget { get; set; }
