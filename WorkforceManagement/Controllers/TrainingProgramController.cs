@@ -85,23 +85,6 @@ namespace WorkforceManagement.Controllers
             }
         }
 
-        // POST: TrainingProgram/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add insert logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
         public ActionResult Create()
         {
             return View();
