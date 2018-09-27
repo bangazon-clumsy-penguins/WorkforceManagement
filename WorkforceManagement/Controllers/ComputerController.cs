@@ -1,18 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using WorkforceManagement.Models;
+using Dapper;
 
 namespace WorkforceManagement.Controllers
 {
     public class ComputerController : Controller
     {
-        // GET: Computer
-        public ActionResult Index()
+        private readonly IConfiguration _config;
+
+        public ComputerController(IConfiguration config)
         {
-            return View();
+            _config = config;
+        }
+
+        public IDbConnection Connection { get
+            {
+                return new SqlConnection(_config.GetConnectionString("DefaultConnection"));
+            }
+        }
+        // GET: Computer
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            string sql = $@"SELECT
+                            c.Id,
+                            c.Model,
+                            c.PurchaseDate,
+                            c.DecommissionDate
+                            FROM Computers c;";
+
+            using (IDbConnection conn = Connection)
+            {
+                List<Computer> computers = (await conn.QueryAsync<Computer>(sql)).ToList();
+                return View(computers);
+            }
         }
 
         // GET: Computer/Details/5
