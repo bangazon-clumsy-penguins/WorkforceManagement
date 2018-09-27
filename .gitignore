@@ -56,6 +56,7 @@ artifacts/
 
 # appsettings
 */appsettings.json
+*.json
 
 # StyleCop
 StyleCopReport.xml
