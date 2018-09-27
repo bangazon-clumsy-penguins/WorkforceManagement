@@ -52,7 +52,7 @@ Create
 
 From the home page `localhost:****` a user can click on the `Computers` link in the Navigation bar. This link will redirect you to the Computers page where a list of all computers will be displayed.
 
-When viewing the list of computers, a user can choose to "Edit", "View" details, "Create" new, or "Delete" a given computer by clicking the associated link. User's can also view a computers details by clicking on the on the individual Computer.
+When viewing the list of computers, a user can choose to "View" details or "Create" new a given computer by clicking the associated link. User's can also view a computers details by clicking on the on the individual Computer.
 
 ### Computers Model
 
