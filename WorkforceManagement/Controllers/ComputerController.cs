@@ -27,6 +27,7 @@ namespace WorkforceManagement.Controllers
             }
         }
         // GET: Computer
+        // This GET method returns all the computers and provides them to View/Computer/Index.cshtml as a List<Computer>
         [HttpGet]
         public async Task<IActionResult> Index()
         {

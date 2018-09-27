@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+/* 
+AUTHORED BY: Adam Wieckert
+
+The Computer model has proporties associated with the Computers table within the BangazonAPI DB. 
+*/
+
 namespace WorkforceManagement.Models
 {
     public class Computer
