@@ -55,6 +55,7 @@ artifacts/
 **/Properties/launchSettings.json
 
 # appsettings
+WorkforceManagement/appsettings.json
 */appsettings.json
 *.json
 
