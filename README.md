@@ -140,6 +140,10 @@ Index ( )
 
 - [HttpGet] Gets a list of all the trainings and then passes them to the index view
 
+Details ( )
+
+- [HttpGet] Gets the details of an individual component and passes them to the detail view
+
 Create ( )
 
 - [HttpPost] Validates Create Form input data and posts new training to database
@@ -149,6 +153,10 @@ Create ( )
 Index
 
 - Shows a list of all the training names. Each name is a hyperlink that can be clicked to view the details of that department.
+
+Details
+
+- Shows the details of a training program including start date, end date, and max occupancy
 
 Create
 
