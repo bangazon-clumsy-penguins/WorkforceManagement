@@ -47,7 +47,7 @@ namespace WorkforceManagement.Controllers
 			}
 		}
 
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details([FromRoute]int? id)
         {
             if (id == null)
             {
@@ -55,22 +55,39 @@ namespace WorkforceManagement.Controllers
             }
 
             string sql = $@"
-            select * 
-            from Departments d
-            where d.Id = {id}
+            select 
+                d.Id,
+                d.Name,
+                d.Budget,
+                e.Id,
+                e.FirstName,
+                e.LastName,
+                e.HireDate,
+                e.IsSupervisor,
+                e.DepartmentId       
+            From Departments d
+            Join Employees e on d.Id = e.DepartmentId
+            Where d.Id = {id}
             ";
 
             using (IDbConnection conn = Connection)
             {
 
-                Department department = (await conn.QueryAsync<Department>(sql)).ToList().Single();
-
-                if (department == null)
+                Department something = new Department();
+                var dept = await conn.QueryAsync<Department, Employee, Department>(sql, (department, employee) =>
                 {
-                    return NotFound();
+
+                    something.Id = department.Id;
+                    something.Name = department.Name;
+                   
+
+                    something.EmployeeList.Add(employee);
+                    return department;
                 }
 
-                return View(department);
+                );
+
+                return View(something);
             }
         }
     }
