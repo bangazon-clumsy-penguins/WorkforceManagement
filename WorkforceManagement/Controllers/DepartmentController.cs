@@ -73,21 +73,21 @@ namespace WorkforceManagement.Controllers
             using (IDbConnection conn = Connection)
             {
 
-                Department something = new Department();
-                var dept = await conn.QueryAsync<Department, Employee, Department>(sql, (department, employee) =>
+                Department dept = new Department();
+                var deptQuery = await conn.QueryAsync<Department, Employee, Department>(sql, (department, employee) =>
                 {
 
-                    something.Id = department.Id;
-                    something.Name = department.Name;
+                    dept.Id = department.Id;
+                    dept.Name = department.Name;
                    
 
-                    something.EmployeeList.Add(employee);
+                    dept.EmployeeList.Add(employee);
                     return department;
                 }
 
                 );
 
-                return View(something);
+                return View(dept);
             }
         }
     }
