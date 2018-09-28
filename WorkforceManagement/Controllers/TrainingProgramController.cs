@@ -34,12 +34,21 @@ namespace WorkforceManagement.Controllers
         // GET: TrainingProgram
         public async Task<IActionResult> Index()
         {
+            //string sql = $@"
+            //select
+            //    t.Id
+            //    ,t.Name
+            //    ,t.Description
+            //from Trainings t
+            //where t.startdate >= '{DateTime.Now.ToString("yyyy-MM-dd")}'
+            //";
+
             string sql = $@"
             select
                 t.Id
                 ,t.Name
+                ,t.Description
             from Trainings t
-            where t.startdate >= '{DateTime.Now.ToString("yyyy-MM-dd")}'
             ";
 
             using (IDbConnection conn = Connection)
@@ -65,6 +74,7 @@ namespace WorkforceManagement.Controllers
             string sql = $@"
             SELECT t.Id	
 	            ,t.Name
+                ,t.Description
 	            ,t.StartDate
 	            ,t.EndDate
 	            ,t.MaxOccupancy
@@ -75,8 +85,8 @@ namespace WorkforceManagement.Controllers
 	            ,e.IsSupervisor
 	            ,e.DepartmentId
             FROM Trainings t
-            JOIN EmployeeTrainings et on t.Id = et.TrainingId
-	            JOIN Employees e on e.Id = et.EmployeeId
+            LEFT JOIN EmployeeTrainings et on t.Id = et.TrainingId
+	            LEFT JOIN Employees e on e.Id = et.EmployeeId
             where t.Id = {id}
             ";
 
@@ -156,9 +166,10 @@ namespace WorkforceManagement.Controllers
             {
                 string sql = $@"
                     INSERT INTO Trainings
-                        ( Name, StartDate, EndDate, MaxOccupancy )
+                        ( Name, Description, StartDate, EndDate, MaxOccupancy )
                         VALUES
                         (  '{trainingProgram.Name}'
+                            , '{trainingProgram.Description}'
                             , '{trainingProgram.StartDate}'
                             , '{trainingProgram.EndDate}'
                             , {trainingProgram.MaxOccupancy}

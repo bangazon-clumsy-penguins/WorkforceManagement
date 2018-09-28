@@ -13,6 +13,8 @@ namespace WorkforceManagement.Models
         [Display(Name = "Program")]
         public string Name { get; set; }
 
+        public string Description { get; set; }
+
         [Required]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         [Display(Name = "Start Date")]
@@ -30,9 +32,6 @@ namespace WorkforceManagement.Models
 
         [Display(Name = "Assigned Employees")]
         public List<Employee> AssignedEmployees { get; set; } = new List<Employee>();
-
-
-
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
