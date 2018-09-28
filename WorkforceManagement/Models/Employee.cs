@@ -34,8 +34,7 @@ namespace WorkforceManagement.Models
         public bool IsSupervisor { get; set; }
 
         [Required]
-        [Range(1,100000)]
-        //[DepartmentIdValid]
+        [Range(1,100000, ErrorMessage = "Please choose a department")]
         public int DepartmentId { get; set; }
 
         public Department Department { get; set; }
@@ -52,21 +51,6 @@ namespace WorkforceManagement.Models
             if (employee.HireDate > DateTime.Now)
             {
                 return new ValidationResult("Date of hire cannot be in the future.");
-            }
-
-            return ValidationResult.Success;
-        }
-    }
-
-    public class DepartmentIdValidAttribute : ValidationAttribute
-    {
-        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
-        {
-            Employee employee = (Employee)validationContext.ObjectInstance;
-
-            if (employee.DepartmentId.ToString() == "0")
-            {
-                return new ValidationResult("Please choose a department.");
             }
 
             return ValidationResult.Success;
