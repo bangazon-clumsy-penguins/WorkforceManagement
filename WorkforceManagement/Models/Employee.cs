@@ -33,7 +33,7 @@ namespace WorkforceManagement.Models
 
         public bool IsSupervisor { get; set; }
 
-        [Required(ErrorMessage = "Please choose a department")]
+        [Required]
         [DepartmentIdValid]
         public int DepartmentId { get; set; }
 
@@ -63,7 +63,7 @@ namespace WorkforceManagement.Models
         {
             Employee employee = (Employee)validationContext.ObjectInstance;
 
-            if (employee.DepartmentId == 0)
+            if (employee.DepartmentId.ToString() == "0")
             {
                 return new ValidationResult("Please choose a department.");
             }
