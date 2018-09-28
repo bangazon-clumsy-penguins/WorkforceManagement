@@ -36,10 +36,12 @@
                 @if (Model.EndDate.Date < DateTime.Today)
                 {
                     <input disabled type="submit" value="Save" class="btn btn-default" />
-                } else
+                    <h6><strong><i>Training has already ended. No changes permitted.</i></strong></h6>
+                }
+                else
                 {
                     <input type="submit" value="Save" class="btn btn-default" />
-                }
+                 }
             </div>
         </form>
     </div>
