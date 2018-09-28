@@ -28,6 +28,8 @@ namespace WorkforceManagement.Models
         [Display(Name = "Max Occupancy")]
         public int MaxOccupancy { get; set; }
 
+        [Display(Name = "Assigned Employees")]
+        public List<Employee> AssignedEmployees { get; set; } = new List<Employee>();
 
     }
 }

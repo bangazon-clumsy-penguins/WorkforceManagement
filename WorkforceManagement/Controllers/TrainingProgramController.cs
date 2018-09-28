@@ -42,10 +42,6 @@ namespace WorkforceManagement.Controllers
             where t.startdate >= '{DateTime.Now.ToString("yyyy-MM-dd")}'
             ";
 
-            Console.WriteLine(sql);
-
-            Console.ReadLine();
-
             using (IDbConnection conn = Connection)
             {
                 Dictionary<int, TrainingProgram> trainingPrograms = new Dictionary<int, TrainingProgram>();
@@ -67,28 +63,81 @@ namespace WorkforceManagement.Controllers
             }
 
             string sql = $@"
-            select
-                t.Id
-                ,t.Name
-                ,t.StartDate
-                ,t.EndDate
-                ,t.MaxOccupancy
-            from Trainings t
+            SELECT t.Id	
+	            ,t.Name
+	            ,t.StartDate
+	            ,t.EndDate
+	            ,t.MaxOccupancy
+	            ,e.Id
+	            ,e.FirstName
+	            ,e.LastName
+	            ,e.HireDate
+	            ,e.IsSupervisor
+	            ,e.DepartmentId
+            FROM Trainings t
+            JOIN EmployeeTrainings et on t.Id = et.TrainingId
+	            JOIN Employees e on e.Id = et.EmployeeId
             where t.Id = {id}
             ";
 
             using (IDbConnection conn = Connection)
             {
-                TrainingProgram trainingProgram = await conn.QuerySingleAsync<TrainingProgram>(sql);
+                TrainingProgram tp = null;
 
-                if (trainingProgram == null)
+                var trainingProgramQuerySet = await conn.QueryAsync<TrainingProgram, Employee, TrainingProgram>(
+                    sql,
+                    (trainingProgram, employee) => {
+
+                        if (tp == null)
+                        {
+                            tp = trainingProgram;
+                        }
+                        Employee emp = new Employee();
+                        emp = employee;
+                        tp.AssignedEmployees.Add(emp);
+                        return trainingProgram;
+                    });
+
+                if (tp == null)
                 {
                     return NotFound();
                 }
 
-                return View(trainingProgram);
+                return View(tp);
             }
         }
+
+        //public async Task<IActionResult> Index () {
+
+        //    string sql = @"
+        //    select
+        //        s.Id,
+        //        s.FirstName,
+        //        s.LastName,
+        //        s.SlackHandle,
+        //        c.Id,
+        //        c.Name
+        //    from Student s
+        //    join Cohort c on s.CohortId = c.Id
+        //    ";
+
+        //    using (IDbConnection conn = Connection) {
+        //        Dictionary<int, Student> students = new Dictionary<int, Student> ();
+
+        //        var studentQuerySet = await conn.QueryAsync<Student, Cohort, Student> (
+        //                sql,
+        //                (student, cohort) => {
+        //                    if (!students.ContainsKey (student.Id)) {
+        //                        students[student.Id] = student;
+        //                    }
+        //                    students[student.Id].Cohort = cohort;
+        //                    return student;
+        //                }
+        //            );
+        //        return View (students.Values);
+
+        //    }
+        //}
 
         public ActionResult Create()
         {
