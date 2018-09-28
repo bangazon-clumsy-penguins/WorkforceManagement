@@ -65,8 +65,10 @@ namespace WorkforceManagement.Controllers
         public async Task<IActionResult> Create(Computer newComputer)
         {
 
-			if (ModelState.IsValid)
+			if (!(ModelState.IsValid))
 			{
+				return View(newComputer);
+			} else {
 				string sql = $@"
 				INSERT INTO Computers
 					(Manufacturer, Model, PurchaseDate, DecommissionDate)
@@ -74,26 +76,21 @@ namespace WorkforceManagement.Controllers
 					('{newComputer.Manufacturer}', '{newComputer.Model}', '{newComputer.PurchaseDate}', null)
 				";
 
-				Console.WriteLine(sql);
-				Console.ReadLine();
-
 				using (IDbConnection conn = Connection)
 				{
 					int rowsAffected = await conn.ExecuteAsync(sql);
-					Console.WriteLine(rowsAffected);
-
-					if (rowsAffected > 0)
+					bool createdSuccessfully = rowsAffected > 0;
+					
+					if (createdSuccessfully)
 					{
 						return RedirectToAction(nameof(Index));
 					} else
 					{
-						throw new Exception("No rows affected");
+						throw new Exception("No rows affected; record was not added to database");
 					}
 				}
 			}
 
-			// ModelState was not valid
-			return View(newComputer);
 
         }
 
