@@ -127,9 +127,33 @@ namespace WorkforceManagement.Controllers
         }
 
         // GET: TrainingProgram/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<IActionResult> Edit (int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            string sql = $@"
+                Select
+                    Id,
+                    Name,
+                    StartDate,
+                    EndDate,
+                    MaxOccupancy
+                From Trainings
+                Where Id = {id}
+            ";
+
+            using (IDbConnection conn = Connection)
+            {
+                TrainingProgram model = new TrainingProgram();
+
+                var training = (await conn.QueryAsync<TrainingProgram>(
+                    sql)).Single();
+                model = training;
+                return View(model);
+            }
         }
 
         // POST: TrainingProgram/Edit/5
