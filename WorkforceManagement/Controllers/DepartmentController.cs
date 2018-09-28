@@ -43,33 +43,42 @@ namespace WorkforceManagement.Controllers
 			}
 		}
 
+        // /Department/Create will send the user to a form to create a new department
         [HttpGet]
         public async Task<IActionResult> Create ()
         {
             return View();
         }
 
+        // On submit of the new department the Create Post will check to see if the department name already exists
+        // if it does not exist the department will be posted to BangazonAPI DB. If department already exists
+        // the user will stay on the create new form view.
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create (Department department)
         {
-            string sql = $@"INSERT INTO Departments
+            if (ModelState.IsValid)
+            {
+
+                string sql = $@"INSERT INTO Departments
                             (Name, Budget)
                             VALUES
                             ('{department.Name}', {department.Budget});";
 
-            if (CheckDepartmentDoesNotExist(department.Name))
-            {
-                using (IDbConnection conn = Connection)
+                if (CheckDepartmentDoesNotExist(department.Name))
                 {
-                    int addDepartment = await conn.ExecuteAsync(sql);
-                    if (addDepartment == 1)
+                    using (IDbConnection conn = Connection)
                     {
-                        return RedirectToAction(nameof(Index));
+                        int addDepartment = await conn.ExecuteAsync(sql);
+                        if (addDepartment == 1)
+                        {
+                            return RedirectToAction(nameof(Index));
+                        }
                     }
                 }
             }
-            //return RedirectToAction(nameof(CannotCreate(department)));
-            return View(department);
+                //return RedirectToAction(nameof(CannotCreate(department)));
+                return View(department);
         }
 
         //public IActionResult CannotCreate(Department department)
