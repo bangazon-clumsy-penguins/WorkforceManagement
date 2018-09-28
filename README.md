@@ -50,6 +50,10 @@ Create
 
 ## Computers
 
+From the home page `localhost:****` a user can click on the `Computers` link in the Navigation bar. This link will redirect you to the Computers page where a list of all computers will be displayed.
+
+When viewing the list of computers, a user can choose to "View" details for a given computer or "Create" a new computer by clicking the associated link. User's can also view a computers details by clicking on the on the individual Computer.
+
 ### Computers Model
 
 ### Computers Controller
@@ -60,9 +64,32 @@ Create
 
 ### Departments Model
 
+```c#
+public class Department
+{
+	public int Id { get; set; }
+
+	[Required]
+	[Display(Name="Department")]
+	public string Name { get; set; }
+
+	[Required]
+	[Range(0.0, Double.PositiveInfinity)]
+	public double Budget { get; set; }
+
+	public List<Employee> EmployeeList { get; set; }
+}
+```
+
 ### Departments Controller
 
+Index ( )
+- [HttpGet] Gets a list of all the departments and then passes them to the index view
+
 ### Departments View
+
+Index
+- Shows a list of all the department names. Each name is a hyperlink that can be clicked to view the details of that department.
 
 ## Employees
 
