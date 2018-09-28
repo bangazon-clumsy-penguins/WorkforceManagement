@@ -34,21 +34,14 @@ namespace WorkforceManagement.Controllers
         // GET: TrainingProgram
         public async Task<IActionResult> Index()
         {
-            //string sql = $@"
-            //select
-            //    t.Id
-            //    ,t.Name
-            //    ,t.Description
-            //from Trainings t
-            //where t.startdate >= '{DateTime.Now.ToString("yyyy-MM-dd")}'
-            //";
-
             string sql = $@"
             select
                 t.Id
                 ,t.Name
                 ,t.Description
+                ,t.StartDate
             from Trainings t
+            where t.startdate >= '{DateTime.Now.ToString("yyyy-MM-dd")}'
             ";
 
             using (IDbConnection conn = Connection)
@@ -58,8 +51,8 @@ namespace WorkforceManagement.Controllers
                 var TrainingProgramsQuerySet = await conn.QueryAsync<TrainingProgram>(
                         sql
                     );
-                return View(TrainingProgramsQuerySet);
 
+                return View(TrainingProgramsQuerySet);
             }
         }
 
@@ -116,38 +109,6 @@ namespace WorkforceManagement.Controllers
                 return View(tp);
             }
         }
-
-        //public async Task<IActionResult> Index () {
-
-        //    string sql = @"
-        //    select
-        //        s.Id,
-        //        s.FirstName,
-        //        s.LastName,
-        //        s.SlackHandle,
-        //        c.Id,
-        //        c.Name
-        //    from Student s
-        //    join Cohort c on s.CohortId = c.Id
-        //    ";
-
-        //    using (IDbConnection conn = Connection) {
-        //        Dictionary<int, Student> students = new Dictionary<int, Student> ();
-
-        //        var studentQuerySet = await conn.QueryAsync<Student, Cohort, Student> (
-        //                sql,
-        //                (student, cohort) => {
-        //                    if (!students.ContainsKey (student.Id)) {
-        //                        students[student.Id] = student;
-        //                    }
-        //                    students[student.Id].Cohort = cohort;
-        //                    return student;
-        //                }
-        //            );
-        //        return View (students.Values);
-
-        //    }
-        //}
 
         public ActionResult Create()
         {
