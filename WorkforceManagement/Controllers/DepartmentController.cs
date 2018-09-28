@@ -42,5 +42,50 @@ namespace WorkforceManagement.Controllers
 				return View(allDepartments);
 			}
 		}
+
+        [HttpGet]
+        public async Task<IActionResult> Create ()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create (Department department)
+        {
+            string sql = $@"INSERT INTO Departments
+                            (Name, Budget)
+                            VALUES
+                            ('{department.Name}', {department.Budget});";
+
+            if (CheckDepartmentDoesNotExist(department.Name))
+            {
+                using (IDbConnection conn = Connection)
+                {
+                    int addDepartment = await conn.ExecuteAsync(sql);
+                    if (addDepartment == 1)
+                    {
+                        return RedirectToAction(nameof(Index));
+                    }
+                }
+            }
+            //return RedirectToAction(nameof(CannotCreate(department)));
+            return View(department);
+        }
+
+        //public IActionResult CannotCreate(Department department)
+        //{
+        //    return View(department);
+        //}
+
+        private bool CheckDepartmentDoesNotExist (string name)
+        {
+            string sql = $"SELECT * FROM Departments d WHERE d.Name = '{name}';";
+
+            using (IDbConnection conn = Connection)
+            {
+                var theCount = conn.Query<Department>(sql).Count();
+                return theCount == 0;
+            }
+        }
 	}
 }
