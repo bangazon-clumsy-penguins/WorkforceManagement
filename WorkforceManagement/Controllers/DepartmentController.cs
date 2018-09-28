@@ -13,39 +13,43 @@ using System.Data.SqlClient;
 
 namespace WorkforceManagement.Controllers
 {
-	public class DepartmentController : Controller
-	{
-		private readonly IConfiguration _config;
+    /* 
+		AUTHORS: Elliot Huck, April Watson
+		PURPOSE: 
+	*/
+    public class DepartmentController : Controller
+    {
+        private readonly IConfiguration _config;
 
-		public DepartmentController(IConfiguration config)
-		{
-			_config = config;
-		}
+        public DepartmentController(IConfiguration config)
+        {
+            _config = config;
+        }
 
-		public IDbConnection Connection
-		{
-			get
-			{
-				return new SqlConnection(_config.GetConnectionString("DefaultConnection"));
-			}
-		}
+        public IDbConnection Connection
+        {
+            get
+            {
+                return new SqlConnection(_config.GetConnectionString("DefaultConnection"));
+            }
+        }
 
-		public async Task<IActionResult> Index()
-		{
-			string sql = @"
+        public async Task<IActionResult> Index()
+        {
+            string sql = @"
 			SELECT * FROM Departments
 			ORDER BY Name
 			";
-			using (IDbConnection conn = Connection)
-			{
-				IEnumerable<Department> allDepartments = await conn.QueryAsync<Department>(sql);
-				return View(allDepartments);
-			}
-		}
+            using (IDbConnection conn = Connection)
+            {
+                IEnumerable<Department> allDepartments = await conn.QueryAsync<Department>(sql);
+                return View(allDepartments);
+            }
+        }
 
         // /Department/Create will send the user to a form to create a new department
         [HttpGet]
-        public async Task<IActionResult> Create ()
+        public async Task<IActionResult> Create()
         {
             return View();
         }
@@ -55,7 +59,7 @@ namespace WorkforceManagement.Controllers
         // the user will stay on the create new form view.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create (Department department)
+        public async Task<IActionResult> Create(Department department)
         {
             if (ModelState.IsValid)
             {
@@ -77,8 +81,8 @@ namespace WorkforceManagement.Controllers
                     }
                 }
             }
-                //return RedirectToAction(nameof(CannotCreate(department)));
-                return View(department);
+            //return RedirectToAction(nameof(CannotCreate(department)));
+            return View(department);
         }
 
         //public IActionResult CannotCreate(Department department)
@@ -86,7 +90,7 @@ namespace WorkforceManagement.Controllers
         //    return View(department);
         //}
 
-        private bool CheckDepartmentDoesNotExist (string name)
+        private bool CheckDepartmentDoesNotExist(string name)
         {
             string sql = $"SELECT * FROM Departments d WHERE d.Name = '{name}';";
 
@@ -96,5 +100,49 @@ namespace WorkforceManagement.Controllers
                 return theCount == 0;
             }
         }
-	}
+
+        public async Task<IActionResult> Details([FromRoute]int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            string sql = $@"
+            select 
+                d.Id,
+                d.Name,
+                d.Budget,
+                e.Id,
+                e.FirstName,
+                e.LastName,
+                e.HireDate,
+                e.IsSupervisor,
+                e.DepartmentId       
+            From Departments d
+            Join Employees e on d.Id = e.DepartmentId
+            Where d.Id = {id}
+            ";
+
+            using (IDbConnection conn = Connection)
+            {
+
+                Department dept = new Department();
+                var deptQuery = await conn.QueryAsync<Department, Employee, Department>(sql, (department, employee) =>
+                {
+
+                    dept.Id = department.Id;
+                    dept.Name = department.Name;
+
+
+                    dept.EmployeeList.Add(employee);
+                    return department;
+                }
+
+                );
+
+                return View(dept);
+            }
+        }
+    }
 }
