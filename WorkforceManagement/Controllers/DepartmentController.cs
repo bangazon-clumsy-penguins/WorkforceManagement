@@ -30,6 +30,9 @@ namespace WorkforceManagement.Controllers
 			}
 		}
 
+		// GET: Department
+		// This GET method returns all the departments and provides them to View/Department/Index.cshtml as an IEnumerable<Department>
+		[HttpGet]
 		public async Task<IActionResult> Index()
 		{
 			string sql = @"

@@ -52,8 +52,9 @@ namespace WorkforceManagement.Controllers
             return View();
         }
 
-        // GET: Computer/Create
-        public ActionResult Create()
+		// GET: Computer/Create
+		// This GET method displays the form used to create a new computer
+		public ActionResult Create()
         {
             return View();
         }
@@ -61,8 +62,35 @@ namespace WorkforceManagement.Controllers
         // POST: Computer/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<IActionResult> Create(Computer newComputer)
         {
+
+			if (ModelState.IsValid)
+			{
+				string sql = $@"
+				INSERT INTO Computers
+					(Manufacturer, Model, PurchaseDate)
+				VALUES
+					('{newComputer.Manufacturer}', '{newComputer.Model}', {newComputer.PurchaseDate})
+				";
+
+				using (IDbConnection conn = Connection)
+				{
+					int rowsAffected = await conn.ExecuteAsync(sql);
+
+					if (rowsAffected > 0)
+					{
+						return RedirectToAction(nameof(Index));
+					} else
+					{
+						throw new Exception("No rows affected");
+					}
+				}
+			}
+
+			return View(newComputer);
+
+
             try
             {
                 // TODO: Add insert logic here
