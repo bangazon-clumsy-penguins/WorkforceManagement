@@ -141,6 +141,7 @@ namespace WorkforceManagement.Controllers
                 Select
                     Id,
                     Name,
+                    Description,
                     StartDate,
                     EndDate,
                     MaxOccupancy
