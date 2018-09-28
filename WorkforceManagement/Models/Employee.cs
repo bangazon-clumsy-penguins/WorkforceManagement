@@ -34,7 +34,8 @@ namespace WorkforceManagement.Models
         public bool IsSupervisor { get; set; }
 
         [Required]
-        [DepartmentIdValid]
+        [Range(1,100000)]
+        //[DepartmentIdValid]
         public int DepartmentId { get; set; }
 
         public Department Department { get; set; }
