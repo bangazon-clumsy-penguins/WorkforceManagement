@@ -14,6 +14,10 @@ using System.Data.SqlClient;
 
 namespace WorkforceManagement.Controllers
 {
+    /*
+        AUTHORS: Phillip Patton, April Watson
+        PURPOSE: To prescribe available actions to the user pertaining to viewing, editing and creating Training Programs.
+    */
     public class TrainingProgramController : Controller
     {
         private readonly IConfiguration _config;
@@ -147,29 +151,48 @@ namespace WorkforceManagement.Controllers
 
             using (IDbConnection conn = Connection)
             {
-                TrainingProgram model = new TrainingProgram();
+                TrainingProgram train = new TrainingProgram();
 
-                var training = (await conn.QueryAsync<TrainingProgram>(
+                var trainingQuery = (await conn.QueryAsync<TrainingProgram>(
                     sql)).Single();
-                model = training;
-                return View(model);
+                train = trainingQuery;
+                return View(train);
             }
         }
 
         // POST: TrainingProgram/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> Edit (int id, TrainingProgram model)
         {
-            try
+            if (id != model.Id)
             {
-                // TODO: Add update logic here
-
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
-            catch
+
+            if (ModelState.IsValid)
             {
-                return View();
+                string sql = $@"
+                UPDATE Trainings
+                SET Name = '{model.Name}',
+                    StartDate = '{model.StartDate.Date}',
+                    EndDate = '{model.EndDate.Date}',
+                    MaxOccupancy = {model.MaxOccupancy}
+                WHERE Id = {id}";
+
+                using (IDbConnection conn = Connection)
+                {
+                    int rowsAffected = await conn.ExecuteAsync(sql);
+                    if (rowsAffected > 0)
+                    {
+                        return RedirectToAction(nameof(Index));
+                    }
+                    throw new Exception("No rows affected");
+                }
+            }
+            else
+            {
+                return new StatusCodeResult(StatusCodes.Status406NotAcceptable);
             }
         }
 
