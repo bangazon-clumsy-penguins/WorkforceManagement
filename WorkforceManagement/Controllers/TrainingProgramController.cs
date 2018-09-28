@@ -95,8 +95,6 @@ namespace WorkforceManagement.Controllers
         }
 
         // POST: Employee/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(TrainingProgram trainingProgram)
@@ -131,6 +129,7 @@ namespace WorkforceManagement.Controllers
         }
 
         // GET: TrainingProgram/Edit/5
+        // Retrieves information pertaining to the selected training program for the purpose of allowing the user to edit
         public async Task<IActionResult> Edit (int? id)
         {
             if (id == null)
@@ -162,6 +161,7 @@ namespace WorkforceManagement.Controllers
         }
 
         // POST: TrainingProgram/Edit/5
+        // Posts user's changes to the database for the specified training program
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit (int id, TrainingProgram model)

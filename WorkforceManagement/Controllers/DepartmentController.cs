@@ -15,7 +15,7 @@ namespace WorkforceManagement.Controllers
 {
     /* 
 		AUTHORS: Elliot Huck, April Watson
-		PURPOSE: 
+		PURPOSE: To prescribe available actions to the user pertaining to viewing Departments.
 	*/
     public class DepartmentController : Controller
 	{
@@ -47,6 +47,8 @@ namespace WorkforceManagement.Controllers
 			}
 		}
 
+        // Queries database for all employees by the specified department id.
+        // Adds employees to the department's employee list and returns the department for display to the browser.
         public async Task<IActionResult> Details([FromRoute]int? id)
         {
             if (id == null)
