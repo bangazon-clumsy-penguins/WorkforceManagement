@@ -60,6 +60,9 @@ namespace WorkforceManagement.Controllers
         }
 
         // POST: Computer/Create
+		// This POST method attempts to post a new computer to the database using the information entered in the form
+		// If the information entered is not valid, it will show the GET view with the currently entered information, along with any applicable error messages
+		// If the data is successfully posted, it will redirect to the main Index view
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Computer newComputer)
