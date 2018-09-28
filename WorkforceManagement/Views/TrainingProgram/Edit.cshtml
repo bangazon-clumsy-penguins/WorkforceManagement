@@ -33,7 +33,13 @@
                 <span asp-validation-for="MaxOccupancy" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-default" />
+                @if (Model.EndDate.Date < DateTime.Today)
+                {
+                    <input disabled type="submit" value="Save" class="btn btn-default" />
+                } else
+                {
+                    <input type="submit" value="Save" class="btn btn-default" />
+                }
             </div>
         </form>
     </div>

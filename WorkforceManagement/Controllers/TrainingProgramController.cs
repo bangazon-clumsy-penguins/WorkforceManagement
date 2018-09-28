@@ -156,6 +156,7 @@ namespace WorkforceManagement.Controllers
                 var trainingQuery = (await conn.QueryAsync<TrainingProgram>(
                     sql)).Single();
                 train = trainingQuery;
+
                 return View(train);
             }
         }
