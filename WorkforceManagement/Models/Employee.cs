@@ -33,7 +33,7 @@ namespace WorkforceManagement.Models
 
         public bool IsSupervisor { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Please choose a department")]
         [DepartmentIdValid]
         public int DepartmentId { get; set; }
 
