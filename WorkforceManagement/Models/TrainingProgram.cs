@@ -5,7 +5,7 @@ using System;
 
 namespace WorkforceManagement.Models
 {
-    public class TrainingProgram
+    public class TrainingProgram : IValidatableObject
     {
         public int Id { get; set; }
 
@@ -31,5 +31,24 @@ namespace WorkforceManagement.Models
         [Display(Name = "Assigned Employees")]
         public List<Employee> AssignedEmployees { get; set; } = new List<Employee>();
 
+
+
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            List<ValidationResult> results = new List<ValidationResult>();
+
+            if (StartDate < DateTime.Today)
+            {
+                results.Add(new ValidationResult("Start date and time must be greater than current time", new[] { "StartDate" }));
+            }
+
+            if (EndDate < StartDate)
+            {
+                results.Add(new ValidationResult("End Date must be greater that Start Date", new[] { "EndDate" }));
+            }
+
+            return results;
+        }
     }
 }
