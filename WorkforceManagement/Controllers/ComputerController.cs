@@ -69,14 +69,18 @@ namespace WorkforceManagement.Controllers
 			{
 				string sql = $@"
 				INSERT INTO Computers
-					(Manufacturer, Model, PurchaseDate)
+					(Manufacturer, Model, PurchaseDate, DecommissionDate)
 				VALUES
-					('{newComputer.Manufacturer}', '{newComputer.Model}', {newComputer.PurchaseDate})
+					('{newComputer.Manufacturer}', '{newComputer.Model}', '{newComputer.PurchaseDate}', null)
 				";
+
+				Console.WriteLine(sql);
+				Console.ReadLine();
 
 				using (IDbConnection conn = Connection)
 				{
 					int rowsAffected = await conn.ExecuteAsync(sql);
+					Console.WriteLine(rowsAffected);
 
 					if (rowsAffected > 0)
 					{
@@ -88,19 +92,9 @@ namespace WorkforceManagement.Controllers
 				}
 			}
 
+			// ModelState was not valid
 			return View(newComputer);
 
-
-            try
-            {
-                // TODO: Add insert logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
         }
 
         // GET: Computer/Edit/5
