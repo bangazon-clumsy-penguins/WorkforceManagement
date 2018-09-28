@@ -48,7 +48,8 @@ namespace WorkforceManagement.Controllers
 
                 var EmployeeQuerySet = await conn.QueryAsync<Employee, Department, Employee>(
                         sql,
-                        (employee, department) => {
+                        (employee, department) =>
+                        {
                             if (!Employees.ContainsKey(employee.Id))
                             {
                                 Employees[employee.Id] = employee;
@@ -98,16 +99,17 @@ namespace WorkforceManagement.Controllers
                 return View(model);
             }
         }
-            //return View();
+        //return View();
+
+        //GET: Employee/Create
+        public ActionResult Create()
+        {
+            EmployeeCreateViewModel createModel = new EmployeeCreateViewModel(_config);
+            return View(createModel);
         }
 
-        //// GET: Employee/Create
-        //public ActionResult Create()
-        //{
-        //    return View();
-        //}
-
-        //// POST: Employee/Create
+        // POST: Employee/Create
+        //Should Include FirstName, LastName, StartDate, and Dropdown with Departments
         //[HttpPost]
         //[ValidateAntiForgeryToken]
         //public ActionResult Create(IFormCollection collection)
@@ -169,5 +171,5 @@ namespace WorkforceManagement.Controllers
         //        return View();
         //    }
         //}
-    
+    }
 }
