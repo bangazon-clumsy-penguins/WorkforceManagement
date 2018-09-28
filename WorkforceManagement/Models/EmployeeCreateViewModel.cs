@@ -16,11 +16,11 @@ namespace WorkforceManagement.Models
 {
     public class EmployeeCreateViewModel
     {
-        [Required]
-        public Employee Employee { get; set; } = new Employee();
+        public Employee Employee { get; set; }
 
         [Display(Name = "Departments")]
-        public List<SelectListItem> DepartmentsList { get; } = new List<SelectListItem>();
+        [Required]
+        public List<SelectListItem> DepartmentsList { get; }
 
         private readonly IConfiguration _config;
 

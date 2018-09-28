@@ -108,23 +108,37 @@ namespace WorkforceManagement.Controllers
             return View(createModel);
         }
 
-        // POST: Employee/Create
-        //Should Include FirstName, LastName, StartDate, and Dropdown with Departments
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Create(IFormCollection collection)
-        //{
-        //    try
-        //    {
-        //        // TODO: Add insert logic here
+        //POST: Employee/Create
+       //Should Include FirstName, LastName, StartDate, and Dropdown with Departments
+       [HttpPost]
+       [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Employee employee)
+        {
+            if (ModelState.IsValid)
+            {
+                    // TODO: Add insert logic here
+                    string sql = $@"INSERT INTO Employees
+                                (FirstName, LastName, HireDate, DepartmentId, IsSupervisor)
+                                 VALUES ('{employee.FirstName}', '{employee.LastName}', '{employee.HireDate}', '{employee.DepartmentId}', 0);";
+                using (IDbConnection conn = Connection)
+                {
+                    int rowsAffected = await conn.ExecuteAsync(sql);
 
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
+                    if (rowsAffected > 0)
+                    {
+                        return RedirectToAction(nameof(Index));
+                    }
+                }
+
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                EmployeeCreateViewModel createModel = new EmployeeCreateViewModel(_config);
+                return View(createModel);
+            }
+            
+        }
 
         //// GET: Employee/Edit/5
         //public ActionResult Edit(int id)
