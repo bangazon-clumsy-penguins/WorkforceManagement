@@ -1,0 +1,51 @@
+﻿@model WorkforceManagement.Models.EmployeeDetailsViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Employee</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Employee.FirstName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Employee.FirstName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Employee.LastName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Employee.LastName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Employee.Department.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Employee.Department.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Employee.Computer.Model)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Employee.Computer.Model)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Trainings[0].Name)
+        </dt>
+        @foreach (var training in Model.Trainings)
+        {
+            <dd>
+                @Html.DisplayFor(model => training.Name)
+            </dd>
+        }
+    </dl>
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Index">Back to List</a>
+</div>
