@@ -123,13 +123,15 @@ Index
 ### Trainings Model
 
 ```c#
-public class TrainingProgram
+public class TrainingProgram : IValidatableObject
 {
 	public int Id { get; set; }
 
 	[Required]
 	[Display(Name = "Program")]
 	public string Name { get; set; }
+
+	public string Description { get; set; }
 
 	[Required]
 	[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
@@ -145,6 +147,9 @@ public class TrainingProgram
 	[Range(1, int.MaxValue, ErrorMessage = "Occupancy must be greater than 0!")]
 	[Display(Name = "Max Occupancy")]
 	public int MaxOccupancy { get; set; }
+
+	[Display(Name = "Assigned Employees")]
+	public List<Employee> AssignedEmployees { get; set; } = new List<Employee>();
 }
 ```
 
@@ -170,8 +175,8 @@ Index
 
 Details
 
-- Shows the details of a training program including start date, end date, and max occupancy
+- Shows the details of a training program including start date, end date, and max occupancy, and current attendees.
 
 Create
 
-- Displays a form of free input fields and date selector fields with validation rules to enforce selection on required fields
+- Displays a form of free input fields and date selector fields with validation rules to enforce selection on required fields.
