@@ -11,13 +11,14 @@ using Microsoft.Extensions.Configuration;
 using WorkforceManagement.Models;
 using System.Data.SqlClient;
 
+/* 
+    AUTHORS: Elliot Huck, April Watson
+    PURPOSE: To prescribe available actions to the user pertaining to viewing Departments.
+*/
+
 namespace WorkforceManagement.Controllers
 {
-    /* 
-		AUTHORS: Elliot Huck, April Watson
-		PURPOSE: To prescribe available actions to the user pertaining to viewing Departments.
-	*/
-    public class DepartmentController : Controller
+	public class DepartmentController : Controller
 	{
 		private readonly IConfiguration _config;
 
@@ -34,18 +35,75 @@ namespace WorkforceManagement.Controllers
 			}
 		}
 
-		public async Task<IActionResult> Index()
-		{
-			string sql = @"
+		// GET: Department
+		// This GET method returns all the departments and provides them to View/Department/Index.cshtml as an IEnumerable<Department>
+
+        public async Task<IActionResult> Index()
+        {
+            string sql = @"
 			SELECT * FROM Departments
 			ORDER BY Name
 			";
-			using (IDbConnection conn = Connection)
-			{
-				IEnumerable<Department> allDepartments = await conn.QueryAsync<Department>(sql);
-				return View(allDepartments);
-			}
-		}
+            using (IDbConnection conn = Connection)
+            {
+                IEnumerable<Department> allDepartments = await conn.QueryAsync<Department>(sql);
+                return View(allDepartments);
+            }
+        }
+
+        // /Department/Create will send the user to a form to create a new department
+        [HttpGet]
+        public async Task<IActionResult> Create()
+        {
+            return View();
+        }
+
+        // On submit of the new department the Create Post will check to see if the department name already exists
+        // if it does not exist the department will be posted to BangazonAPI DB. If department already exists
+        // the user will stay on the create new form view.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Department department)
+        {
+            if (ModelState.IsValid)
+            {
+
+                string sql = $@"INSERT INTO Departments
+                            (Name, Budget)
+                            VALUES
+                            ('{department.Name}', {department.Budget});";
+
+                if (CheckDepartmentDoesNotExist(department.Name))
+                {
+                    using (IDbConnection conn = Connection)
+                    {
+                        int addDepartment = await conn.ExecuteAsync(sql);
+                        if (addDepartment == 1)
+                        {
+                            return RedirectToAction(nameof(Index));
+                        }
+                    }
+                }
+            }
+            //return RedirectToAction(nameof(CannotCreate(department)));
+            return View(department);
+        }
+
+        //public IActionResult CannotCreate(Department department)
+        //{
+        //    return View(department);
+        //}
+
+        private bool CheckDepartmentDoesNotExist(string name)
+        {
+            string sql = $"SELECT * FROM Departments d WHERE d.Name = '{name}';";
+
+            using (IDbConnection conn = Connection)
+            {
+                var theCount = conn.Query<Department>(sql).Count();
+                return theCount == 0;
+            }
+        }
 
         // Queries database for all employees by the specified department id.
         // Adds employees to the department's employee list and returns the department for display to the browser.
@@ -81,7 +139,7 @@ namespace WorkforceManagement.Controllers
 
                     dept.Id = department.Id;
                     dept.Name = department.Name;
-                   
+
 
                     dept.EmployeeList.Add(employee);
                     return department;

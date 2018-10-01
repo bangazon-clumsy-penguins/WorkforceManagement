@@ -16,11 +16,17 @@ namespace WorkforceManagement.Models
     {
         [Key]
         public int Id { get; set; }
+
+		[Required]
         public string Manufacturer { get; set; }
+
+		[Required]
         [Display(Name = "Computer Type")]
         public string Model { get; set; }
+
         [Display(Name = "Purchase Date")]
         public DateTime PurchaseDate { get; set; }
+
         [Display(Name = "Decommission Date")]
         public DateTime? DecommissionDate { get; set; }
     }
