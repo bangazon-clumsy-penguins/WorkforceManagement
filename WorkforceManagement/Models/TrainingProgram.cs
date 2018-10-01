@@ -5,6 +5,11 @@ using System;
 
 namespace WorkforceManagement.Models
 {
+
+    /*
+        AUTHORS: Phillip Patton, April Watson
+        PURPOSE: To model a training program for the company. Each program has a name, description, start date, end date and max occupancy.
+    */
     public class TrainingProgram
     {
         public int Id { get; set; }
