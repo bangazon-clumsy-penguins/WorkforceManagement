@@ -13,7 +13,6 @@ namespace WorkforceManagement.Models
         [Display(Name = "Program")]
         public string Name { get; set; }
 
-        [Required]
         [Display(Name = "Description")]
         public string Description { get; set; }
 
