@@ -11,28 +11,32 @@ using Microsoft.Extensions.Configuration;
 using WorkforceManagement.Models;
 using System.Data.SqlClient;
 
+/* 
+    AUTHORS: Elliot Huck, April Watson
+    PURPOSE: To prescribe available actions to the user pertaining to viewing Departments.
+*/
+
 namespace WorkforceManagement.Controllers
 {
-    /* 
-		AUTHORS: Elliot Huck, April Watson
-		PURPOSE: To prescribe available actions to the user pertaining to viewing Departments.
-	*/
-    public class DepartmentController : Controller
-    {
-        private readonly IConfiguration _config;
+	public class DepartmentController : Controller
+	{
+		private readonly IConfiguration _config;
 
-        public DepartmentController(IConfiguration config)
-        {
-            _config = config;
-        }
+		public DepartmentController(IConfiguration config)
+		{
+			_config = config;
+		}
 
-        public IDbConnection Connection
-        {
-            get
-            {
-                return new SqlConnection(_config.GetConnectionString("DefaultConnection"));
-            }
-        }
+		public IDbConnection Connection
+		{
+			get
+			{
+				return new SqlConnection(_config.GetConnectionString("DefaultConnection"));
+			}
+		}
+
+		// GET: Department
+		// This GET method returns all the departments and provides them to View/Department/Index.cshtml as an IEnumerable<Department>
 
         public async Task<IActionResult> Index()
         {
