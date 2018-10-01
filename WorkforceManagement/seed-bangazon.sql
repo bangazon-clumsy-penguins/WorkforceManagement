@@ -60,11 +60,11 @@ INSERT INTO Departments (Name, Budget) VALUES
 ,('Marketing', 80000)
 
 INSERT INTO Trainings (Name, Description, StartDate, EndDate, MaxOccupancy) VALUES 
-('Safety', 'This program teaches you to be safe', '2018-05-05', '2018-06-09', 10)
-,('Anti-Terrorism', 'What to do in the event of a terror attack', '2018-05-06', '2018-06-10', 10)
-,('Write Better Code', 'Do you suck at coding? take this', '2018-05-07', '2018-06-11', 12)
-,('Spelling Training', 'You need to be able to spell, honestly','2018-05-08', '2018-06-12', 12)
-,('Physical Training', 'Gotta be strong','2018-05-09', '2018-06-13', 12)
+('Safety', 'Safety on the premises', '2018-05-05', '2018-06-09', 10)
+,('Anti-Terrorism', 'Fending off bad guys', '2018-05-06', '2018-06-10', 10)
+,('Write Better Code', 'Cause you should', '2018-05-07', '2018-06-11', 12)
+,('Spelling Training', 'Cause you should', '2018-05-08', '2018-06-12', 12)
+,('Physical Training', 'No pain no gain', '2018-05-09', '2018-06-13', 12)
 
 INSERT INTO Employees (FirstName, LastName, HireDate, IsSupervisor, DepartmentId) VALUES 
 ('Tom', 'Smith', '2015-05-01', 1, (SELECT Id FROM Departments WHERE Name='Finance'))
