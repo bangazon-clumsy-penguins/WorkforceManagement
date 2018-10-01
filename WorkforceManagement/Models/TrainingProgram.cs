@@ -5,6 +5,11 @@ using System;
 
 namespace WorkforceManagement.Models
 {
+    /*
+        AUTHORS: Phillip Patton
+        PURPOSE: To model a training program for the company. Each program has a name, description, start date, end date and max occupancy.
+    */
+
     public class TrainingProgram : IValidatableObject
     {
         public int Id { get; set; }
@@ -13,6 +18,7 @@ namespace WorkforceManagement.Models
         [Display(Name = "Program")]
         public string Name { get; set; }
 
+        [Display(Name = "Description")]
         public string Description { get; set; }
 
         [Required]

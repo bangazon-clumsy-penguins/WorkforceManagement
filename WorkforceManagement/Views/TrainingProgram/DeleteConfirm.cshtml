@@ -1,0 +1,66 @@
+﻿@model WorkforceManagement.Models.TrainingProgram
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>TrainingProgram</h4>
+    <hr />
+    <dl class="dl-horizontal">
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.StartDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.StartDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.EndDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.EndDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.MaxOccupancy)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.MaxOccupancy)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        @if (Model.StartDate.Date <= DateTime.Today)
+        {
+            <div>
+                <input disabled type="submit" value="Delete" class="btn btn-default" />
+                <h6><strong><i>Cannot delete. Training has already ended.</i></strong></h6>
+                <a asp-action="Index">Back to List</a>
+            </div>
+        }
+        else
+        {
+    <div>
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <a asp-action="Index">Back to List</a>
+    </div>
+}
+
+    </form>
+</div>
