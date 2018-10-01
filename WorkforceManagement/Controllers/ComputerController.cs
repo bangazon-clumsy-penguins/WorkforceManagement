@@ -47,6 +47,7 @@ namespace WorkforceManagement.Controllers
         }
 
         // GET: Computer/Details/5
+        // Query the database for a specific computer based on the id provided at the end of the url
         public async Task<IActionResult> Details(int id)
         {
             string sql = $@"SELECT
@@ -71,6 +72,8 @@ namespace WorkforceManagement.Controllers
             }
         }
 
+        // Checks to see if the computer Id in question does not exist in the data base. 
+        // If the computer does not exist the function will return True
         private bool CheckComputerDoesNotExist(int id)
         {
             string sql = $"SELECT * FROM Computers c WHERE c.Id = {id};";
