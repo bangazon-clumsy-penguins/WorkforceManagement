@@ -45,7 +45,7 @@
     </dl>
     
     <form asp-action="Delete">
-        @if (Model.EndDate.Date < DateTime.Today)
+        @if (Model.StartDate.Date < DateTime.Today)
         {
         <div>
             <input disabled type="submit" value="Delete" class="btn btn-default" />
