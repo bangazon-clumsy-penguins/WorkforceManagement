@@ -14,6 +14,10 @@ namespace WorkforceManagement.Models
         public string Name { get; set; }
 
         [Required]
+        [Display(Name = "Description")]
+        public string Description { get; set; }
+
+        [Required]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         [Display(Name = "Start Date")]
         public DateTime StartDate { get; set; }

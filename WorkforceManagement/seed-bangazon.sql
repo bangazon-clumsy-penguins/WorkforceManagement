@@ -59,12 +59,12 @@ INSERT INTO Departments (Name, Budget) VALUES
 ,('Accounting', 7000)
 ,('Marketing', 80000)
 
-INSERT INTO Trainings (Name, StartDate, EndDate, MaxOccupancy) VALUES 
-('Safety', '2018-05-05', '2018-06-09', 10)
-,('Anti-Terrorism', '2018-05-06', '2018-06-10', 10)
-,('Write Better Code', '2018-05-07', '2018-06-11', 12)
-,('Spelling Training', '2018-05-08', '2018-06-12', 12)
-,('Physical Training', '2018-05-09', '2018-06-13', 12)
+INSERT INTO Trainings (Name, Description, StartDate, EndDate, MaxOccupancy) VALUES 
+('Safety', 'Safety on the premises', '2018-05-05', '2018-06-09', 10)
+,('Anti-Terrorism', 'Fending off bad guys', '2018-05-06', '2018-06-10', 10)
+,('Write Better Code', 'Cause you should', '2018-05-07', '2018-06-11', 12)
+,('Spelling Training', 'Cause you should', '2018-05-08', '2018-06-12', 12)
+,('Physical Training', 'No pain no gain', '2018-05-09', '2018-06-13', 12)
 
 INSERT INTO Employees (FirstName, LastName, HireDate, IsSupervisor, DepartmentId) VALUES 
 ('Tom', 'Smith', '2015-05-01', 1, (SELECT Id FROM Departments WHERE Name='Finance'))
