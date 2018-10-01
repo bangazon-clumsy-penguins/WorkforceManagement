@@ -21,6 +21,7 @@ namespace WorkforceManagement.Models
         public string Manufacturer { get; set; }
 
 		[Required]
+        [Display(Name = "Computer Type")]
         public string Model { get; set; }
 
         [Display(Name = "Purchase Date")]
