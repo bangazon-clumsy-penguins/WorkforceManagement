@@ -263,12 +263,19 @@ namespace WorkforceManagement.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
 
-            string sql = $@"DELETE FROM EmployeeTrainings WHERE TrainingId = {id};
-                    Delete from Trainings where Id = {id}";
+            string sql = $@"DELETE FROM EmployeeTrainings WHERE TrainingId = {id}";
 
             using (IDbConnection conn = Connection)
             {
                 int rowsAffected = await conn.ExecuteAsync(sql);
+               
+            }
+
+            string sql2 = $@"Delete from Trainings where Id = {id}";
+
+            using (IDbConnection conn = Connection)
+            {
+                int rowsAffected = await conn.ExecuteAsync(sql2);
                 if (rowsAffected > 0)
                 {
                     return RedirectToAction(nameof(Index));

@@ -45,20 +45,22 @@
     </dl>
     
     <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
         @if (Model.StartDate.Date < DateTime.Today)
         {
-        <div>
-            <input disabled type="submit" value="Delete" class="btn btn-default" />
-            <h6><strong><i>Cannot delete. Training has already ended.</i></strong></h6>
-            <a asp-action="Index">Back to List</a>
-        </div>
-        } else
-        {
-        <div>
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            <a asp-action="Index">Back to List</a>
-        </div>
+            <div>
+                <input disabled type="submit" value="Delete" class="btn btn-default" />
+                <h6><strong><i>Cannot delete. Training has already ended.</i></strong></h6>
+                <a asp-action="Index">Back to List</a>
+            </div>
         }
-         
+        else
+        {
+    <div>
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <a asp-action="Index">Back to List</a>
+    </div>
+}
+
     </form>
 </div>
