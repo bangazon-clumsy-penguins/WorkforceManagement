@@ -16,7 +16,7 @@ namespace WorkforceManagement.Controllers
 {
     /*
         AUTHORS: Phillip Patton, April Watson
-        PURPOSE: To prescribe available actions to the user pertaining to viewing, editing and creating Training Programs.
+        PURPOSE: To prescribe available actions to the user pertaining to viewing, editing, creating and deleting Training Programs.
     */
     public class TrainingProgramController : Controller
     {
