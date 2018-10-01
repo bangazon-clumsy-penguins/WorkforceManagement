@@ -48,7 +48,8 @@ namespace WorkforceManagement.Controllers
 
                 var EmployeeQuerySet = await conn.QueryAsync<Employee, Department, Employee>(
                         sql,
-                        (employee, department) => {
+                        (employee, department) =>
+                        {
                             if (!Employees.ContainsKey(employee.Id))
                             {
                                 Employees[employee.Id] = employee;
@@ -98,31 +99,46 @@ namespace WorkforceManagement.Controllers
                 return View(model);
             }
         }
-            //return View();
+        //return View();
+
+        //GET: Employee/Create
+        public ActionResult Create()
+        {
+            EmployeeCreateViewModel createModel = new EmployeeCreateViewModel(_config);
+            return View(createModel);
         }
 
-        //// GET: Employee/Create
-        //public ActionResult Create()
-        //{
-        //    return View();
-        //}
+        //POST: Employee/Create
+       //Should Include FirstName, LastName, StartDate, and Dropdown with Departments
+       [HttpPost]
+       [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Employee employee)
+        {
+            if (ModelState.IsValid)
+            {
+                    // TODO: Add insert logic here
+                    string sql = $@"INSERT INTO Employees
+                                (FirstName, LastName, HireDate, DepartmentId, IsSupervisor)
+                                 VALUES ('{employee.FirstName}', '{employee.LastName}', '{employee.HireDate}', '{employee.DepartmentId}', 0);";
+                using (IDbConnection conn = Connection)
+                {
+                    int rowsAffected = await conn.ExecuteAsync(sql);
 
-        //// POST: Employee/Create
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Create(IFormCollection collection)
-        //{
-        //    try
-        //    {
-        //        // TODO: Add insert logic here
+                    if (rowsAffected > 0)
+                    {
+                        return RedirectToAction(nameof(Index));
+                    }
+                }
 
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                EmployeeCreateViewModel createModel = new EmployeeCreateViewModel(_config);
+                return View(createModel);
+            }
+            
+        }
 
         //// GET: Employee/Edit/5
         //public ActionResult Edit(int id)
@@ -169,5 +185,5 @@ namespace WorkforceManagement.Controllers
         //        return View();
         //    }
         //}
-    
+        }
 }
