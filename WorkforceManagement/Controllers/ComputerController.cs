@@ -47,14 +47,44 @@ namespace WorkforceManagement.Controllers
         }
 
         // GET: Computer/Details/5
-        public ActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            return View();
+            string sql = $@"SELECT
+                            c.Id,
+                            c.Manufacturer,
+                            c.Model,
+                            c.PurchaseDate,
+                            c.DecommissionDate
+                            FROM Computers c
+                            WHERE c.Id = {id};";
+
+            using (IDbConnection conn = Connection)
+            {
+                if (CheckComputerDoesNotExist(id))
+                {
+                    return RedirectToAction(nameof(Index));
+                } else
+                {
+                    var computer = (await conn.QueryAsync<Computer>(sql)).Single();
+                    return View(computer);
+                }
+            }
         }
 
-		// GET: Computer/Create
-		// This GET method displays the form used to create a new computer
-		public ActionResult Create()
+        private bool CheckComputerDoesNotExist(int id)
+        {
+            string sql = $"SELECT * FROM Computers c WHERE c.Id = {id};";
+
+            using (IDbConnection conn = Connection)
+            {
+                var theCount = conn.Query<Computer>(sql).Count();
+                return theCount == 0;
+            }
+        }
+
+        // GET: Computer/Create
+        // This GET method displays the form used to create a new computer
+        public ActionResult Create()
         {
             return View();
         }

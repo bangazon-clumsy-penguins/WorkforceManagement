@@ -53,7 +53,7 @@ namespace WorkforceManagement.Controllers
 
         // /Department/Create will send the user to a form to create a new department
         [HttpGet]
-        public async Task<IActionResult> Create()
+        public ActionResult Create()
         {
             return View();
         }
