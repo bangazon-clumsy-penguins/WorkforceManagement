@@ -38,11 +38,14 @@ namespace WorkforceManagement.Controllers
         // GET: TrainingProgram
         public async Task<IActionResult> Index()
         {
-            string sql = @"
+            string sql = $@"
             select
                 t.Id
                 ,t.Name
+                ,t.Description
+                ,t.StartDate
             from Trainings t
+            where t.startdate >= '{DateTime.Now.ToString("yyyy-MM-dd")}'
             ";
 
             using (IDbConnection conn = Connection)
@@ -52,8 +55,8 @@ namespace WorkforceManagement.Controllers
                 var TrainingProgramsQuerySet = await conn.QueryAsync<TrainingProgram>(
                         sql
                     );
-                return View(TrainingProgramsQuerySet);
 
+                return View(TrainingProgramsQuerySet);
             }
         }
 
@@ -66,26 +69,48 @@ namespace WorkforceManagement.Controllers
             }
 
             string sql = $@"
-            select
-                t.Id
-                ,t.Name
-                ,t.StartDate
-                ,t.EndDate
-                ,t.MaxOccupancy
-            from Trainings t
+            SELECT t.Id	
+	            ,t.Name
+                ,t.Description
+	            ,t.StartDate
+	            ,t.EndDate
+	            ,t.MaxOccupancy
+	            ,e.Id
+	            ,e.FirstName
+	            ,e.LastName
+	            ,e.HireDate
+	            ,e.IsSupervisor
+	            ,e.DepartmentId
+            FROM Trainings t
+            LEFT JOIN EmployeeTrainings et on t.Id = et.TrainingId
+	            LEFT JOIN Employees e on e.Id = et.EmployeeId
             where t.Id = {id}
             ";
 
             using (IDbConnection conn = Connection)
             {
-                TrainingProgram trainingProgram = await conn.QuerySingleAsync<TrainingProgram>(sql);
+                TrainingProgram tp = null;
 
-                if (trainingProgram == null)
+                var trainingProgramQuerySet = await conn.QueryAsync<TrainingProgram, Employee, TrainingProgram>(
+                    sql,
+                    (trainingProgram, employee) => {
+
+                        if (tp == null)
+                        {
+                            tp = trainingProgram;
+                        }
+                        Employee emp = new Employee();
+                        emp = employee;
+                        tp.AssignedEmployees.Add(emp);
+                        return trainingProgram;
+                    });
+
+                if (tp == null)
                 {
                     return NotFound();
                 }
 
-                return View(trainingProgram);
+                return View(tp);
             }
         }
 
@@ -104,9 +129,10 @@ namespace WorkforceManagement.Controllers
             {
                 string sql = $@"
                     INSERT INTO Trainings
-                        ( Name, StartDate, EndDate, MaxOccupancy )
+                        ( Name, Description, StartDate, EndDate, MaxOccupancy )
                         VALUES
                         (  '{trainingProgram.Name}'
+                            , '{trainingProgram.Description}'
                             , '{trainingProgram.StartDate}'
                             , '{trainingProgram.EndDate}'
                             , {trainingProgram.MaxOccupancy}

@@ -57,9 +57,11 @@ Create
 
 ## Computers
 
-From the home page `localhost:****` a user can click on the `Computers` link in the Navigation bar. This link will redirect you to the Computers page where a list of all computers will be displayed.
+From the home page `localhost:****` a user can click on the `Computers` link in the Navigation bar. This link will redirect the user to the Computers page where a list of all computers will be displayed.
 
-When viewing the list of computers, a user can choose to "View" details for a given computer or "Create" a new computer by clicking the associated link. User's can also view a computers details by clicking on the on the individual Computer.
+When viewing the list of computers, a user can choose to "View" details for a given computer or "Create" a new computer by clicking the associated link. Users can also view a computers details by clicking on the on the individual Computer.
+
+When the "Create New" link is clicked, the user will be taken to a form where they can enter the Manufacturer, Model, and PurchaseDate of the new computer. All fields are required. When a computer is successfully added to the database, the user will be redirected to the main computers view showing the list of all computers.
 
 ### Computers Model
 
@@ -121,13 +123,15 @@ Index
 ### Trainings Model
 
 ```c#
-public class TrainingProgram
+public class TrainingProgram : IValidatableObject
 {
 	public int Id { get; set; }
 
 	[Required]
 	[Display(Name = "Program")]
 	public string Name { get; set; }
+
+	public string Description { get; set; }
 
 	[Required]
 	[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
@@ -143,6 +147,9 @@ public class TrainingProgram
 	[Range(1, int.MaxValue, ErrorMessage = "Occupancy must be greater than 0!")]
 	[Display(Name = "Max Occupancy")]
 	public int MaxOccupancy { get; set; }
+
+	[Display(Name = "Assigned Employees")]
+	public List<Employee> AssignedEmployees { get; set; } = new List<Employee>();
 }
 ```
 
@@ -168,8 +175,8 @@ Index
 
 Details
 
-- Shows the details of a training program including start date, end date, and max occupancy
+- Shows the details of a training program including start date, end date, and max occupancy, and current attendees.
 
 Create
 
-- Displays a form of free input fields and date selector fields with validation rules to enforce selection on required fields
+- Displays a form of free input fields and date selector fields with validation rules to enforce selection on required fields.
