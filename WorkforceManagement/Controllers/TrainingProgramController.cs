@@ -199,25 +199,55 @@ namespace WorkforceManagement.Controllers
         }
 
         // GET: TrainingProgram/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<IActionResult> DeleteConfirm(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            string sql = $@"
+                select
+                    Id,
+                    Name,
+                    Description,
+                    StartDate,
+                    EndDate,
+                    MaxOccupancy
+                from Trainings
+                WHERE Id = {id}";
+
+            using (IDbConnection conn = Connection)
+            {
+
+                TrainingProgram trainingQuery = (await conn.QueryAsync<TrainingProgram>(sql)).ToList().Single();
+
+                if (trainingQuery == null)
+                {
+                    return NotFound();
+                }
+
+                return View(trainingQuery);
+            }
         }
 
         // POST: TrainingProgram/Delete/5
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            try
-            {
-                // TODO: Add delete logic here
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch
+            string sql = $@"DELETE FROM EmployeeTrainings WHERE TrainingId = {id};
+                    Delete from Trainings where Id = {id}";
+
+            using (IDbConnection conn = Connection)
             {
-                return View();
+                int rowsAffected = await conn.ExecuteAsync(sql);
+                if (rowsAffected > 0)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                throw new Exception("No rows affected");
             }
         }
     }
