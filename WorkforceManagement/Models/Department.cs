@@ -23,6 +23,6 @@ namespace WorkforceManagement.Models
 		[Range(0.0, Double.PositiveInfinity)]
 		public double Budget { get; set; }
 
-		public List<Employee> EmployeeList { get; set; }
+        public List<Employee> EmployeeList { get; set; } = new List<Employee>();
 	}
 }
