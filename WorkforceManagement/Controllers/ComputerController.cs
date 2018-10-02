@@ -159,7 +159,14 @@ namespace WorkforceManagement.Controllers
 			}
 		}
 
-		// GET: Computer/Delete/5
+		/* GET: Computer/Delete/5
+		This GET method is launched by clicking the "Delete" link in the Details view of an individual computer.
+		The method uses the ComputerHasBeenAssigned() method below to check if the computer has been assigned to any employees
+		If it has, the user is redirected to the DenyDelete view informing them they cannot delete the computer
+		If it has not been assigned, the user is redirected to the ConfirmDelete view prompting them to confirm that they want to delete the item.
+			If the Delete button is clicked, the computer is deleted and the user is redirected to the Index
+			If the Cancel button is clicked, the computer is NOT deleted and the user redirected to the Index
+		 */
 		[HttpGet]
 		public async Task<IActionResult> ConfirmDelete(int? id)
 		{
@@ -193,6 +200,9 @@ namespace WorkforceManagement.Controllers
 			}
 		}
 
+		/*
+		 This method checks if a computer has already been assigned to an employee. It is used by the ConfirmDelete and Delete methods.
+		 */
 		private bool ComputerHasBeenAssigned(int? id)
 		{
 			string sql = $@"
@@ -215,13 +225,20 @@ namespace WorkforceManagement.Controllers
 			}
 		}
 
-		// POST: Computer/Delete/5
+		/* 
+		 POST: Computer/Delete/5
+		 This POST method removes the computer from the database. It is accessed by clicking the Delete button on the ConfirmDelete view
+		 It double checks to make sure the computer has not been assigned to an employee, throwing an exception if it has been assigned.
+		*/
 		[HttpPost, ActionName("Delete")]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Delete(int id/*, IFormCollection collection*/)
+		public async Task<IActionResult> Delete(int id)
 		{
+			if (ComputerHasBeenAssigned(id))
+			{
+				throw new Exception("You cannot delete a computer that has been assigned to an employee");
+			}
 
-			// TODO: Add delete logic here
 			string sql = $@"
 				DELETE FROM Computers WHERE Id = {id};
 				";
