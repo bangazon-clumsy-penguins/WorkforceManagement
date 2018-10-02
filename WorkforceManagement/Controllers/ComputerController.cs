@@ -154,13 +154,57 @@ namespace WorkforceManagement.Controllers
         }
 
         // GET: Computer/Delete/5
-        public ActionResult Delete(int id)
+		[HttpGet]
+        public async Task<IActionResult> ConfirmDelete(int? id)
         {
-            return View();
+			if (id == null)
+			{
+				return NotFound();
+			}
+
+			string sqlComputerDetails = $@"
+			SELECT
+				c.Id,
+				c.Manufacturer,
+				c.Model,
+				c.PurchaseDate,
+				c.DecommissionDate
+			FROM Computers c
+			WHERE c.Id = {id}
+			";
+
+			using (IDbConnection conn = Connection)
+			{
+
+				return View("ConfirmDelete");
+			}
+
         }
 
+		private async bool ComputerHasBeenAssigned(int id)
+		{
+			string sql = $@"
+			SELECT 
+				e.Id,
+				e.FirstName,
+				e.LastName,
+				e.HireDate,
+				e.DepartmentId
+			FROM Employees e
+			JOIN EmployeeComputers ec ON e.Id = ec.EmployeeId
+			JOIN Computers c ON ec.ComputerId = c.Id
+			WHERE c.Id = {id}
+			";
+			
+			using (IDbConnection conn = Connection)
+			{
+				int numAssignments = (await conn.QueryAsync<Employee>(sql)).Count();
+				return numAssignments > 0;
+			}
+		}
+
         // POST: Computer/Delete/5
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
         {
