@@ -143,6 +143,82 @@ namespace WorkforceManagement.Controllers
         // GET: Employee/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
+            return View((await getEmployeeEditViewModel(id)));
+        }
+
+        // POST: Employee/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, EmployeeEditViewModel editedEmployee)
+        {
+            EmployeeEditViewModel currentEmployee = await getEmployeeEditViewModel(id);
+            
+            if (editedEmployee.Employee.LastName != currentEmployee.Employee.LastName)
+            {
+                string updateLastName = $@"UPDATE Employees SET LastName = '{editedEmployee.Employee.LastName}'
+                                            WHERE Id = {id}";
+            }
+
+            if (editedEmployee.Employee.DepartmentId != currentEmployee.Employee.DepartmentId)
+            {
+                string updateDepartment = $@"UPDATE Employees SET DepartmentId = {editedEmployee.Employee.DepartmentId}
+                                            WHERE Id = {id}";
+            }
+
+            if (currentEmployee.Employee.Computer != null)
+            {
+                if (editedEmployee.Employee.Computer.Id != currentEmployee.Employee.Computer.Id)
+                {
+                    string returnComputer = $@"
+                    UPDATE EmployeeComputers SET ReturnDate = '{DateTime.Today}'
+                    Where EmployeeId = {id} AND ComputerId = {currentEmployee.Employee.Computer.Id}
+                    AND ReturnDate is null;";
+
+                    if (editedEmployee.Employee.Computer.Id != 0)
+                    {
+                        string assignEmployeeComputer = $@"
+                                INSERT INTO EmployeeComputer VALUES ('{DateTime.Today}', null, {id}, {editedEmployee.Employee.Computer.Id});";
+                    }
+                }
+            } else
+            {
+                if (editedEmployee.Employee.Computer.Id != 0)
+                {
+                    string assignEmployeeComputer = $@"
+                                INSERT INTO EmployeeComputer VALUES ('{DateTime.Today}', null, {id}, {editedEmployee.Employee.Computer.Id});";
+                }
+            }
+
+
+            return View();
+
+        }
+
+        // GET: Employee/Delete/5
+        public ActionResult Delete(int id)
+        {
+            return View();
+        }
+
+        // POST: Employee/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id, IFormCollection collection)
+        {
+            try
+            {
+                // TODO: Add delete logic here
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        public async Task<EmployeeEditViewModel> getEmployeeEditViewModel (int id)
+        {
             string sql = $@"SELECT 
                 e.Id,
                 e.FirstName,
@@ -174,47 +250,7 @@ namespace WorkforceManagement.Controllers
                 }
                 EmployeeEditViewModel employeeEditModel = new EmployeeEditViewModel(_config, id);
                 employeeEditModel.Employee = employeeToAdd;
-                return View(employeeEditModel);
-            }
-        }
-
-        // POST: Employee/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Employee/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: Employee/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
+                return employeeEditModel;
             }
         }
     }
