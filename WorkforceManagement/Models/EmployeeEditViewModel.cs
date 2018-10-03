@@ -74,6 +74,19 @@ namespace WorkforceManagement.Models
             WHERE b.Id is null
             and t.startdate >= '{DateTime.Now.ToString("yyyy-MM-dd")}';";
 
+            string availableComputers = $@"Select c.Id,
+                                            c.Manufacturer,
+                                            c.Model,
+                                            c.PurchaseDate,
+                                            c.DecommissionDate
+            From Computers c
+            Left Join (
+	            Select *
+	            From EmployeeComputers ec
+	            Where ec.ReturnDate is null
+            ) r on c.Id = r.ComputerId
+            Where r.ComputerId is null or r.EmployeeId = {id};";
+
             using (IDbConnection conn = Connection)
             {
                 List<Department> department = (conn.Query<Department>(sql)).ToList();
