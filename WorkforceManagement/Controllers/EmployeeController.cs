@@ -163,10 +163,16 @@ namespace WorkforceManagement.Controllers
 
             using (IDbConnection conn = Connection)
             {
-                Computer employeeComputer = (await conn.QueryAsync<Computer>(currentComputer)).Single();
+
                 Employee employeeToAdd = (await conn.QueryAsync<Employee>(sql)).Single();
+
+                var employeeComputer = (await conn.QueryAsync<Computer>(currentComputer));
+
+                if (employeeComputer.Count() == 1)
+                {
+                    employeeToAdd.Computer = employeeComputer.Single();
+                }
                 EmployeeEditViewModel employeeEditModel = new EmployeeEditViewModel(_config, id);
-                employeeToAdd.Computer = employeeComputer;
                 employeeEditModel.Employee = employeeToAdd;
                 return View(employeeEditModel);
             }

@@ -23,9 +23,12 @@ namespace WorkforceManagement.Models
             }
         }
 
-        public List<Training> AssignableTrainings { get; set; } = new List<Training>();
+        public List<SelectListItem> AssignableTrainings { get; set; } = new List<SelectListItem>();
 
-        public List<Training> AssignedTrainings { get; set; } = new List<Training>();
+        public List<string> AssignedTrainings { get; set; } = new List<string>();
+
+        [Display(Name="Register Trainings (Ctrl + click to select multiple)")]
+        public MultiSelectList TrainingMulti { get; set; }
 
         [Display(Name="Current Computer")]
         public List<SelectListItem> AvailableComputers { get; set; } = new List<SelectListItem>();
@@ -64,16 +67,7 @@ namespace WorkforceManagement.Models
                 ,t.Description
                 ,t.StartDate
             from Trainings t
-            LEFT OUTER JOIN (
-                SELECT
-                    t.Id
-                from Trainings t
-                LEFT OUTER JOIN EmployeeTrainings et on et.TrainingId = t.Id
-                WHERE et.EmployeeId = {id}
-                GROUP BY t.Id
-            ) b on b.Id = t.Id
-            WHERE b.Id is null
-            and t.startdate >= '{DateTime.Now.ToString("yyyy-MM-dd")}';";
+            where t.startdate >= '{DateTime.Now.ToString("yyyy-MM-dd")}';";
 
             string availableComputers = $@"
             Select c.Id,
@@ -93,10 +87,20 @@ namespace WorkforceManagement.Models
             {
                 List<Department> department = (conn.Query<Department>(sql)).ToList();
                 List<Computer> computers = (conn.Query<Computer>(availableComputers)).ToList();
-                AssignedTrainings = (conn.Query<Training>(assignedTrainings)).ToList();
-                AssignableTrainings = (conn.Query<Training>(assignableTrainings)).ToList();
+                List<Training> currentTrainings = (conn.Query<Training>(assignedTrainings)).ToList();
+                List<Training> usableTraining = (conn.Query<Training>(assignableTrainings)).ToList();
 
                 this.DepartmentList = department
+                    .Select(li => new SelectListItem
+                    {
+                        Text = li.Name,
+                        Value = li.Id.ToString()
+                    }).ToList();
+
+                this.AssignedTrainings = currentTrainings
+                    .Select(li => li.Id.ToString()).ToList();
+
+                this.AssignableTrainings = usableTraining
                     .Select(li => new SelectListItem
                     {
                         Text = li.Name,
@@ -109,6 +113,15 @@ namespace WorkforceManagement.Models
                     Text = $"{li.Manufacturer} {li.Model}",
                     Value = li.Id.ToString()
                 }).ToList();
+
+                AvailableComputers.Insert(0, new SelectListItem
+                {
+                    Text = "None",
+                    Value = "0"
+                });
+
+
+                TrainingMulti = new MultiSelectList(AssignableTrainings.OrderBy(x => x.Text), "Value", "Text");
 
 
             }
