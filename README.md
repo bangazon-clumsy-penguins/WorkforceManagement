@@ -63,6 +63,8 @@ When viewing the list of computers, a user can choose to "View" details for a gi
 
 When the "Create New" link is clicked, the user will be taken to a form where they can enter the Manufacturer, Model, and PurchaseDate of the new computer. All fields are required. When a computer is successfully added to the database, the user will be redirected to the main computers view showing the list of all computers.
 
+When a user is viewing the details of a single computer, they can click on the "Delete" link to delete a computer. If the computer has already been assigned to an employee, the user will be redirected to a page informing them that the computer cannot be deleted. If the computer has not been assigned to any employees, the user will be taken to a page asking them to confirm their choice of deleting the computer. Clicking the "Delete" button will remove the computer from the database and take the user back to the list of all computers. Clicking the "Cancel" button will take the user back to the list of all computers without deleting the computer from the database.
+
 ### Computers Model
 
 ### Computers Controller
