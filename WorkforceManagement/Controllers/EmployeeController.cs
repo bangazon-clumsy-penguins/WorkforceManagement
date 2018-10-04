@@ -169,8 +169,7 @@ namespace WorkforceManagement.Controllers
 
 				}
 
-
-				// This section handles changes to the department
+		// This section handles changes to the department
 				if (editedEmployee.Employee.DepartmentId != currentEmployee.Employee.DepartmentId)
 				{
 					string updateDepartment = $@"
@@ -182,7 +181,6 @@ namespace WorkforceManagement.Controllers
 				}
 
 		// This section handles changes to the computer
-	
 				if (currentEmployee.Employee.Computer != null)
 				{ // Runs if the employee has a computer already
 
@@ -227,33 +225,26 @@ namespace WorkforceManagement.Controllers
 				IEnumerable<string> removedTrainings = currentEmployee.AssignedTrainings.Except(editedEmployee.AssignedTrainings);
 				IEnumerable<string> addedTrainings = editedEmployee.AssignedTrainings.Except(currentEmployee.AssignedTrainings);
 
-				StringBuilder allSql = new StringBuilder();
 				foreach (string trainingId in removedTrainings)
 				{
-					string sql = $@"
+					string deleteTrainingSql = $@"
 					DELETE FROM EmployeeTrainings 
 					WHERE EmployeeId = {id} AND TrainingId = {Int32.Parse(trainingId)}; 
 					";
-
-					allSql.Append(sql);
+					bool deleteSuccess = (await conn.ExecuteAsync(deleteTrainingSql)) > 0;
 				}
 
 				foreach (string trainingId in addedTrainings)
 				{
-					string sql = $@"
+					string addTrainingSql = $@"
 					INSERT INTO EmployeeTrainings
 						(EmployeeId, TrainingId)
 					VALUES
 						('{id}', '{trainingId}');  
 					";
-
-					allSql.Append(sql);
+					bool addTrainingSuccess = (await conn.ExecuteAsync(addTrainingSql)) > 0;
 				}
 
-				if (allSql.Length > 0)
-				{
-					int rowsAffected = await conn.ExecuteAsync(allSql.ToString());
-				}
 			}
 
 			return RedirectToAction(nameof(Index));
