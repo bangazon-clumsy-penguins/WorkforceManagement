@@ -226,9 +226,12 @@ namespace WorkforceManagement.Controllers
 				allSql.Append(sql);
 			}
 
-			using (IDbConnection conn = Connection)
+			if (allSql.Length > 0)
 			{
-				int rowsAffected = await conn.ExecuteAsync(allSql.ToString());
+				using (IDbConnection conn = Connection)
+				{
+					int rowsAffected = await conn.ExecuteAsync(allSql.ToString());
+				}
 			}
 
 			return RedirectToAction(nameof(Index));
