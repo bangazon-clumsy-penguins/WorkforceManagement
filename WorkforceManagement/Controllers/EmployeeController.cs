@@ -153,89 +153,102 @@ namespace WorkforceManagement.Controllers
         public async Task<IActionResult> Edit(int id, EmployeeEditViewModel editedEmployee)
         {
             EmployeeEditViewModel currentEmployee = await getEmployeeEditViewModel(id);
-            
-            if (editedEmployee.Employee.LastName != currentEmployee.Employee.LastName)
-            {
-                string updateLastName = $@"UPDATE Employees SET LastName = '{editedEmployee.Employee.LastName}'
-                                            WHERE Id = {id}";
-            }
 
-            if (editedEmployee.Employee.DepartmentId != currentEmployee.Employee.DepartmentId)
-            {
-                string updateDepartment = $@"UPDATE Employees SET DepartmentId = {editedEmployee.Employee.DepartmentId}
-                                            WHERE Id = {id}";
-            }
+			using (IDbConnection conn = Connection)
+			{ 
 
-            if (currentEmployee.Employee.Computer != null)
-            {
-                if (editedEmployee.Employee.Computer.Id != currentEmployee.Employee.Computer.Id)
-                {
-                    string returnComputer = $@"
-                    UPDATE EmployeeComputers SET ReturnDate = '{DateTime.Today}'
-                    Where EmployeeId = {id} AND ComputerId = {currentEmployee.Employee.Computer.Id}
-                    AND ReturnDate is null;";
+		// This section handles changes to the last name
+				if (editedEmployee.Employee.LastName != currentEmployee.Employee.LastName)
+				{
+					string updateLastName = $@"UPDATE Employees SET LastName = '{editedEmployee.Employee.LastName}'
+											WHERE Id = {id}";
+				}
 
-                    if (editedEmployee.Employee.Computer.Id != 0)
-                    {
-                        string assignEmployeeComputer = $@"
-                                INSERT INTO EmployeeComputer VALUES ('{DateTime.Today}', null, {id}, {editedEmployee.Employee.Computer.Id});";
-                    }
-                }
-            } else
-            {
-                if (editedEmployee.Employee.Computer.Id != 0)
-                {
-                    string assignEmployeeComputer = $@"
-                                INSERT INTO EmployeeComputer VALUES ('{DateTime.Today}', null, {id}, {editedEmployee.Employee.Computer.Id});";
-                }
-            }
 
-			//Something about employee trainings
-			/* 
-			IEnumerable<string> removedTrainings = currentEmployee.Trainings.Except(editedEmployee.Trainings);
-			IEnumerable<string> addedTrainings = editedEmployee.Trainings.Except(currentEmployee.Trainings);
-			for each removedTraining, iterate and delete
-			for each addedTraining, iterate and insert
-			Also, make sure training for currentEmployee hasn't ended
-			 */
+		// This section handles changes to the department
+				if (editedEmployee.Employee.DepartmentId != currentEmployee.Employee.DepartmentId)
+				{
+					string updateDepartment = $@"UPDATE Employees SET DepartmentId = {editedEmployee.Employee.DepartmentId}
+												WHERE Id = {id}";
+				}
 
-			IEnumerable<string> removedTrainings = currentEmployee.AssignedTrainings.Except(editedEmployee.AssignedTrainings);
-			IEnumerable<string> addedTrainings = editedEmployee.AssignedTrainings.Except(currentEmployee.AssignedTrainings);
+		// This section handles changes to the computer
+	
+				if (currentEmployee.Employee.Computer != null)
+				{ // Runs if the employee has a computer already
 
-			StringBuilder allSql = new StringBuilder();
-			foreach (string trainingId in removedTrainings)
-			{
-				string sql = $@"
-				DELETE FROM EmployeeTrainings 
-				WHERE EmployeeId = {id}
-				AND TrainingId = {Int32.Parse(trainingId)}; 
-				";
+					if (editedEmployee.Employee.Computer.Id != currentEmployee.Employee.Computer.Id)
+					{ // Runs if the employee has changed to a new computer or changed to no computer
+						// Sets the ReturnDate of their old computer to today
+						string returnComputer = $@"
+						UPDATE EmployeeComputers SET ReturnDate = '{DateTime.Today}'
+						WHERE EmployeeId = {id} AND ComputerId = {currentEmployee.Employee.Computer.Id}
+						AND ReturnDate IS NULL;
+						";
+						bool computerReturnSuccess = (await conn.ExecuteAsync(returnComputer)) > 0;
 
-				allSql.Append(sql);
-			}
+						if (editedEmployee.Employee.Computer.Id != 0)
+						{ // Runs if the employee has changed to a new computer
+							// Adds the new computer into the EmployeeComputer intersection table
+							string assignEmployeeComputer = $@"
+							INSERT INTO EmployeeComputers 
+							VALUES 
+								('{DateTime.Today}', null, {id}, {editedEmployee.Employee.Computer.Id});
+							";
+							bool computerChangeSuccess = (await conn.ExecuteAsync(assignEmployeeComputer)) > 0;
+						}
+					}
+				}
+				else
+				{ // Runs if the employee did not already have a computer
+					if (editedEmployee.Employee.Computer.Id != 0)
+					{ // Runs if the employee is assigned a new computer
+						string assignEmployeeComputer = $@"
+						INSERT INTO EmployeeComputers
+						VALUES 
+							('{DateTime.Today}', null, {id}, {editedEmployee.Employee.Computer.Id});
+						";
+						bool computerAddSuccess = (await conn.ExecuteAsync(assignEmployeeComputer)) > 0;
+					}
+					// If the employee had no computer and was not assigned a computer, nothing happens
+				}
 
-			foreach (string trainingId in addedTrainings)
-			{
-				string sql = $@"
-				INSERT INTO EmployeeTrainings
-					(EmployeeId, TrainingId)
-				VALUES
-					('{id}', '{trainingId}');  
-				";
 
-				allSql.Append(sql);
-			}
+		// This section handles changes to the trainings
+				IEnumerable<string> removedTrainings = currentEmployee.AssignedTrainings.Except(editedEmployee.AssignedTrainings);
+				IEnumerable<string> addedTrainings = editedEmployee.AssignedTrainings.Except(currentEmployee.AssignedTrainings);
 
-			if (allSql.Length > 0)
-			{
-				using (IDbConnection conn = Connection)
+				StringBuilder allSql = new StringBuilder();
+				foreach (string trainingId in removedTrainings)
+				{
+					string sql = $@"
+					DELETE FROM EmployeeTrainings 
+					WHERE EmployeeId = {id}
+					AND TrainingId = {Int32.Parse(trainingId)}; 
+					";
+
+					allSql.Append(sql);
+				}
+
+				foreach (string trainingId in addedTrainings)
+				{
+					string sql = $@"
+					INSERT INTO EmployeeTrainings
+						(EmployeeId, TrainingId)
+					VALUES
+						('{id}', '{trainingId}');  
+					";
+
+					allSql.Append(sql);
+				}
+
+				if (allSql.Length > 0)
 				{
 					int rowsAffected = await conn.ExecuteAsync(allSql.ToString());
 				}
 			}
 
 			return RedirectToAction(nameof(Index));
-
         }
 
         // GET: Employee/Delete/5
