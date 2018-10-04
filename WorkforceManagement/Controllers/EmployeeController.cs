@@ -76,7 +76,7 @@ namespace WorkforceManagement.Controllers
 
             string sql = $@"SELECT e.Id, e.FirstName, e.LastName, d.Id, d.Name, c.Id, c.Model, t.Id, t.Name FROM Employees e
                             JOIN Departments d ON e.DepartmentId = d.Id
-                            LEFT JOIN EmployeeComputers ec ON ec.EmployeeId = e.Id
+                            LEFT JOIN EmployeeComputers ec ON ec.EmployeeId = e.Id AND ec.ReturnDate IS NULL
                             LEFT JOIN Computers c ON ec.ComputerId = c.Id
                             LEFT JOIN EmployeeTrainings et ON et.EmployeeId = e.Id
                             LEFT JOIN Trainings t ON et.TrainingId = t.Id
