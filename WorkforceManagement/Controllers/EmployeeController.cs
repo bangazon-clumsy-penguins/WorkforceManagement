@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Dapper;
 using Microsoft.AspNetCore.Http;
@@ -189,8 +190,48 @@ namespace WorkforceManagement.Controllers
                 }
             }
 
+			//Something about employee trainings
+			/* 
+			IEnumerable<string> removedTrainings = currentEmployee.Trainings.Except(editedEmployee.Trainings);
+			IEnumerable<string> addedTrainings = editedEmployee.Trainings.Except(currentEmployee.Trainings);
+			for each removedTraining, iterate and delete
+			for each addedTraining, iterate and insert
+			Also, make sure training for currentEmployee hasn't ended
+			 */
 
-            return View();
+			IEnumerable<string> removedTrainings = currentEmployee.AssignedTrainings.Except(editedEmployee.AssignedTrainings);
+			IEnumerable<string> addedTrainings = editedEmployee.AssignedTrainings.Except(currentEmployee.AssignedTrainings);
+
+			StringBuilder allSql = new StringBuilder();
+			foreach (string trainingId in removedTrainings)
+			{
+				string sql = $@"
+				DELETE FROM EmployeeTrainings 
+				WHERE EmployeeId = {id}
+				AND TrainingId = {Int32.Parse(trainingId)}; 
+				";
+
+				allSql.Append(sql);
+			}
+
+			foreach (string trainingId in addedTrainings)
+			{
+				string sql = $@"
+				INSERT INTO EmployeeTrainings
+					(EmployeeId, TrainingId)
+				VALUES
+					('{id}', '{trainingId}');  
+				";
+
+				allSql.Append(sql);
+			}
+
+			using (IDbConnection conn = Connection)
+			{
+				int rowsAffected = await conn.ExecuteAsync(allSql.ToString());
+			}
+
+			return RedirectToAction(nameof(Index));
 
         }
 
