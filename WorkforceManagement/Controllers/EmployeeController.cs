@@ -160,16 +160,25 @@ namespace WorkforceManagement.Controllers
 		// This section handles changes to the last name
 				if (editedEmployee.Employee.LastName != currentEmployee.Employee.LastName)
 				{
-					string updateLastName = $@"UPDATE Employees SET LastName = '{editedEmployee.Employee.LastName}'
-											WHERE Id = {id}";
+					string updateLastName = $@"
+					UPDATE Employees 
+					SET LastName = '{editedEmployee.Employee.LastName}'
+					WHERE Id = {id}
+					";
+					bool lastNameChangeSuccess = (await conn.ExecuteAsync(updateLastName)) > 0;
+
 				}
 
 
-		// This section handles changes to the department
+				// This section handles changes to the department
 				if (editedEmployee.Employee.DepartmentId != currentEmployee.Employee.DepartmentId)
 				{
-					string updateDepartment = $@"UPDATE Employees SET DepartmentId = {editedEmployee.Employee.DepartmentId}
-												WHERE Id = {id}";
+					string updateDepartment = $@"
+					UPDATE Employees 
+					SET DepartmentId = {editedEmployee.Employee.DepartmentId}
+					WHERE Id = {id}
+					";
+					bool departmentChangeSuccess = (await conn.ExecuteAsync(updateDepartment)) > 0;
 				}
 
 		// This section handles changes to the computer
@@ -223,8 +232,7 @@ namespace WorkforceManagement.Controllers
 				{
 					string sql = $@"
 					DELETE FROM EmployeeTrainings 
-					WHERE EmployeeId = {id}
-					AND TrainingId = {Int32.Parse(trainingId)}; 
+					WHERE EmployeeId = {id} AND TrainingId = {Int32.Parse(trainingId)}; 
 					";
 
 					allSql.Append(sql);
